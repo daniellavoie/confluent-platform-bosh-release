@@ -4,7 +4,7 @@ This is a BOSH release and deployment manifest deploy the Confluent Platform on 
 
 ## Motivation
 
-Containers are fun, but getting stateful workloads in them can get a bit arkward. The abstraction layers it brins only adds more complexity to the primitives they require only in the name of cloud independance.
+Containers are fun, but getting stateful workloads in them can get a bit arkward. The abstraction layers it brings only adds more complexity to the primitives they require only in the name of cloud independance.
 
 What if a cloud agnostic resource orchestrator existed and that was closer to the underlying cloud native resources. Enters [Bosh](https://bosh.io). As stated by the project presentation : 
 
