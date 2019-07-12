@@ -1,0 +1,110 @@
+---
+name: confluent-server
+
+packages:
+- openjdk-8
+- confluent-platform
+
+templates:
+  bin/pre-start.erb: bin/bpm-pre-start
+  bin/ctl.erb: bin/ctl
+  bin/post-deploy.erb: bin/post-deploy
+  config/bpm.yml: config/bpm.yml
+  config/server.properties.erb: config/server.properties
+  config/log4j.properties: config/log4j.properties
+  config/ca_certs.pem.erb: config/ca_certs.pem
+  config/cert.pem.erb: config/cert.pem
+  config/key.pem.erb: config/key.pem
+  config/kafka_server_jaas.conf.erb: config/kafka_server_jaas.conf
+
+consumes:
+- name: confluent-zookeeper
+  type: zookeeper-conn
+
+provides:
+- name: confluent-server
+  type: server-conn
+  properties:
+  - listen_port
+  - tls.ca_certs
+  - tls.certificate
+  - keystore_password
+  - enable_sasl_scram
+  - jaas_admin.username
+  - jaas_admin.password
+
+properties:
+  listen_port:
+    description: The port to listen for client connections
+    default: 9092
+  
+  jmx_port:
+    description: The port to listen for JMX connections, disabled by default
+    default: ''
+
+  topics:
+    default: []
+    description: |-
+      List of topics to create
+      - name: test
+        replication_factor: 1
+        partitions: 1
+
+  delete_topic:
+    description: "Switch to enable topic deletion or not"
+    default: false
+
+  offsets.topic.replication.factor:
+    description: "The replication factor for the offsets topic"
+    default: 3
+
+  transaction.state.log.replication.factor:
+    description: "The replication factor for the transaction topic"
+    default: 3
+
+  transaction.state.log.min.isr:
+    description: "Overridden min.insync.replicas config for the transaction topic"
+    default: 2
+
+  advertised.listener:
+    desctiption: |-
+      List of hostname and port of an advertised listener for each kafka broker, e.g.
+      - cluster1.foo.com:9092 # for broker1
+      - cluster2.foo.com:9092 # for broker2
+      - cluster3.foo.com:9092 # for broker3
+
+  tls.ca_certs:
+    description: |
+      List of CA certs used to verify clients (and other Kafka brokers) that connect to us
+    default: []
+
+  tls.certificate:
+    description: |
+      Certificate (needs private_key and certificate) used to act as both server, and client to other brokers
+
+  keystore_password:
+    description: "Keystore password"
+    default: notasecret
+
+  enable_sasl_scram:
+    description: "Whether to use SASL/SCRAM for authentication"
+    default: false
+
+  jaas_admin.username:
+    description: "admin username used in JAAS configuration"
+    default: "admin"
+
+  jaas_admin.password:
+    description: "admin password used in JAAS configuration"
+    default: "admin-secret"
+  
+  metric_reporter.enable:
+    description: "Enable Confluent Metric Reporter"
+    default: true
+
+  metric_reporter.bootstrap_servers:
+    description: "Bootstrap servers for metric reporter. Will default to listenner address and port if not defined"
+
+  metric_reporter.replicas:
+    description: "Number of replicas for Confluent Metric Reporter"
+    default: 3

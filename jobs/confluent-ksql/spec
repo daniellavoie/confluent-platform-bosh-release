@@ -1,0 +1,28 @@
+---
+name: confluent-ksql
+
+templates:
+  bin/ctl: bin/ctl
+  config/bpm.yml: config/bpm.yml
+  config/ksql-server.properties.erb: config/ksql-server.properties
+
+packages:
+- openjdk-8
+- confluent-platform
+
+consumes:
+- name: confluent-server
+  type: server-conn
+- name: confluent-schema-registry
+  type: registry-conn
+
+provides:
+- name: confluent-ksql
+  type: ksql-conn
+  properties:
+  - listen_port
+
+properties:
+  listen_port:
+    description: The port the server listens on.
+    default: 8088

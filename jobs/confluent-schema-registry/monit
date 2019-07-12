@@ -1,0 +1,5 @@
+check process confluent-schema-registry
+  with pidfile /var/vcap/sys/run/bpm/confluent-schema-registry/confluent-schema-registry.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start confluent-schema-registry"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop confluent-schema-registry"
+  group vcap

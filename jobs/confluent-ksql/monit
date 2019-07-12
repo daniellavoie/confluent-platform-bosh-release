@@ -1,0 +1,5 @@
+check process confluent-ksql
+  with pidfile /var/vcap/sys/run/bpm/confluent-ksql/confluent-ksql.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start confluent-ksql"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop confluent-ksql"
+  group vcap

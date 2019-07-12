@@ -1,0 +1,37 @@
+---
+name: confluent-control-center
+
+templates:
+  bin/ctl: bin/ctl
+  config/bpm.yml: config/bpm.yml
+  config/control-center.properties.erb: config/control-center.properties
+  config/log4j.properties: config/log4j.properties
+
+consumes:
+- name: confluent-zookeeper
+  type: zookeeper-conn
+- name: confluent-server
+  type: server-conn
+- name: confluent-schema-registry
+  type: registry-conn
+- name: confluent-connect
+  type: connect-conn
+- name: confluent-ksql
+  type: ksql-conn
+
+provides:
+- name: confluent-control-center
+  type: control-center-conn
+  properties:
+  - listen_port
+
+packages:
+- openjdk-8
+- confluent-platform
+
+properties:
+  listen_port:
+    description: The port to listen for client connections
+    default: 9021
+  confluent.license:
+    description: "Confluent Platform License"

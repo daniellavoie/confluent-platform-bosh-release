@@ -1,0 +1,49 @@
+---
+name: confluent-connect
+
+templates:
+  bin/ctl: bin/ctl
+  config/bpm.yml: config/bpm.yml
+  config/connect.properties.erb: config/connect.properties
+
+packages:
+- openjdk-8
+- confluent-platform
+
+consumes:
+- name: confluent-server
+  type: server-conn
+- name: confluent-schema-registry
+  type: registry-conn
+
+provides:
+- name: confluent-connect
+  type: connect-conn
+  properties:
+  - listen_port
+
+properties:
+  listen_port:
+    description: The port to listen for client connections
+    default: 8083
+  group_id:
+    description: Unique identifier for the set of workers that form the Kafka Connect cluster
+    default: connect-cluster
+  config.storage.topic:
+    description: Names of the internal topics for storing configs
+    default: connect-configs
+  config.storage.replication_factor:
+    description: Replication factor for the config topic
+    default: 3
+  offset.storage.topic:
+    description: Names of the internal topics for storing offsets
+    default: connect-offsets
+  offset.storage.replication_factor:
+    description: Replication factor for the offset topic
+    default: 3
+  status.storage.topic:
+    description: Names of the internal topics for storing statuses
+    default: connect-statuses
+  status.storage.replication_factor:
+    description: Replication factor for the status topic
+    default: 3

@@ -1,0 +1,41 @@
+# host/port pairs to use for establishing the initial connection to the Kafka cluster
+<% servers = link('confluent-server') %>
+<% zks = link('confluent-zookeeper') %>
+<% connect = link('confluent-connect') %>
+<% ksql = link('confluent-ksql') %>
+<% registry = link('confluent-schema-registry') %>
+
+confluent.controlcenter.rest.listeners=http://0.0.0.0:<%= p("listen_port") %>
+
+<% server_listen_port = servers.p('listen_port') %>
+bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:#{server_listen_port}" }.join(",") %>
+
+# location for Control Center data
+confluent.controlcenter.data.dir=/var/vcap/store/confluent-control-center
+
+# the Confluent license
+<% if !p("confluent.license", nil).nil? %>
+confluent.license=<%= p("confluent.license") %>
+<% end %>
+
+# ZooKeeper connection string with host and port of a ZooKeeper servers
+<% zk_port = zks.p('client_port') %>
+zookeeper.connect=<%= zks.instances.map { |instance| "#{instance.address}:#{zk_port}" }.join(",") %>
+
+<% replication = servers.instances.size > 2 ? 3 : 1 %>
+confluent.metrics.topic.replication=<%= replication %>
+confluent.monitoring.interceptor.topic.replication=<%= replication %>
+confluent.controlcenter.command.topic.replication=<%= replication %>
+confluent.controlcenter.internal.topics.replication=<%= replication %>
+
+# A comma separated list of Connect host names
+<% connect_listen_port = connect.p('listen_port') %>
+confluent.controlcenter.connect.cluster=<%= connect.instances.map { |instance| "http://#{instance.address}:#{connect_listen_port}" }.join(",") %>
+
+# KSQL cluster URL
+<% ksql_listen_port = ksql.p('listen_port') %>
+confluent.controlcenter.ksql.url=<%= ksql.instances.map { |instance| "http://#{instance.address}:#{ksql_listen_port}" }.join(",") %>
+
+# Schema Registry cluster URL
+<% registry_listen_port = registry.p('listen_port') %>
+confluent.controlcenter.schema.registry.url=<%= registry.instances.map { |instance| "http://#{instance.address}:#{registry_listen_port}" }.join(",") %>

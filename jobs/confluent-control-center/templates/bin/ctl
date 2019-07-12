@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+source /var/vcap/packages/openjdk-8/bosh/runtime.env
+
+export CONTROL_CENTER_OPTS="-Djava.io.tmpdir=/var/vcap/data/tmp"
+export CONTROL_CENTER_LOG4J_OPTS="-Dlog4j.configuration=file:/var/vcap/jobs/confluent-control-center/config/log4j.properties"
+
+case $1 in
+
+  start)
+    exec  \
+      /var/vcap/packages/confluent-platform/bin/control-center-start \
+      config/control-center.properties
+    ;;
+
+  *)
+    echo "Usage: $0 {start}"
+    exit 1
+    ;;
+
+esac
+exit 0

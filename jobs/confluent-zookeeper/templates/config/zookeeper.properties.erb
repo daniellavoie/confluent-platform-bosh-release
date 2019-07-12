@@ -1,0 +1,27 @@
+<% peers = link('peers') %>
+
+<% peers.instances.each do |instance| %>
+server.<%= instance.index+1 %>=<%= (instance.id == spec.id) ? "0.0.0.0" : instance.address %>:<%= peers.p('quorum_port') %>:<%= peers.p('leader_election_port') %>
+<% end %>
+
+autopurge.purgeInterval=<%= p('autopurge_purge_interval') %>
+autopurge.snapRetainCount=<%= p('autopurge_snap_retain_count') %>
+clientPort=<%= peers.p('client_port') %>
+clientPortAddress=<%= p('listen_address') %>
+cnxTimeout=<%= p('cnx_timeout') %>
+dataDir=/var/vcap/store/confluent-zookeeper
+dataLogDir=/var/vcap/sys/log/confluent-zookeeper
+electionAlg=<%= p('election_algorim') %>
+fsync.warningthresholdms=<%= p('warning_threshold_ms') %>
+globalOutstandingLimit=<%= p('global_outstanding_limit') %>
+initLimit=<%= p('init_limit') %>
+leaderServes=<%= p('leader_serves') %>
+maxClientCnxns=<%= p('max_client_connections') %>
+maxSessionTimeout=<%= p('max_session_timeout') %>
+minSessionTimeout=<%= p('min_session_timeout') %>
+preAllocSize=<%= p('pre_allocation_size') %>
+snapCount=<%= p('snap_count') %>
+syncEnabled=<%= p('sync_enabled') %>
+syncLimit=<%= p('sync_limit') %>
+tickTime=<%= p('tick_time') %>
+forceSync=<%= p('force_sync') %>

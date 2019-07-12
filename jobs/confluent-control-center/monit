@@ -1,0 +1,5 @@
+check process confluent-control-center
+  with pidfile /var/vcap/sys/run/bpm/confluent-control-center/confluent-control-center.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start confluent-control-center"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop confluent-control-center"
+  group vcap

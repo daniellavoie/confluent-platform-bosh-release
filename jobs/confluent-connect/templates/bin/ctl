@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+source /var/vcap/packages/openjdk-8/bosh/runtime.env
+
+case $1 in
+
+  start)
+    exec  \
+      /var/vcap/packages/confluent-platform/bin/connect-distributed \
+      config/connect.properties
+    ;;
+
+  *)
+    echo "Usage: $0 {start}"
+    exit 1
+    ;;
+
+esac
+exit 0
