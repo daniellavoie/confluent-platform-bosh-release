@@ -34,6 +34,18 @@ Long story short, Bosh let you declare a desired state of your software and the 
 
 This current iteration was successully tested on AWS and GCP cpis.
 
+## Deploy single collocated VM
+
+```
+bosh deploy confluent-platform-bosh-release/manifests/confluent-platform-solo.yml -o confluent-platform-bosh-release/manifests/operators/create.yml
+``` 
+
+## Deploy Confluent Platform Cluster
+
+```
+bosh deploy confluent-platform-bosh-release/manifests/confluent-platform.yml -o confluent-platform-bosh-release/manifests/operators/create.yml
+``` 
+
 ## Updates
 
 When new versions of `confluent-platform-bosh-release` are released the `manifests/confluent-platform-solo.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.
