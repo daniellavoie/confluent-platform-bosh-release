@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+source /var/vcap/packages/openjdk-8/bosh/runtime.env
+export PATH=$PATH:/var/vcap/packages/confluent-platform/bin:$PATH
+
+export CLASSPATH=${CLASSPATH:-''}
+for jar_dir in $(ls -d /var/vcap/packages/**/*.jar); do
+  export CLASSPATH=${jar_dir}:$CLASSPATH
+done
+
+<% if p("enable_sasl_scram") %>
+export KAFKA_OPTS="-Djava.security.auth.login.config=/var/vcap/jobs/confluent-server/config/kafka_server_jaas.conf"
+<% end %>
+export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/var/vcap/jobs/confluent-server/config/log4j.properties"
+export LOG_DIR=/var/vcap/sys/log/confluent-server
+export JMX_PORT="<%= p("jmx_port") %>"
+
+case $1 in
+
+  start)
+    exec /var/vcap/packages/confluent-platform/bin/kafka-server-start \
+      /var/vcap/jobs/confluent-server/config/server.properties
+    ;;
+
+  *)
+    echo "Usage: $0 {start}"
+    exit 1
+    ;;
+
+esac
+exit 0

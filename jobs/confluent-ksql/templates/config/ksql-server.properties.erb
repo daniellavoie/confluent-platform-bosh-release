@@ -1,0 +1,62 @@
+<% servers = link('confluent-server') %>
+<% schemaRegistries = link('confluent-schema-registry') %>
+#
+# Copyright 2018 Confluent Inc.
+#
+# Licensed under the Confluent Community License (the "License"); you may not use
+# this file except in compliance with the License.  You may obtain a copy of the
+# License at
+#
+# http://www.confluent.io/confluent-community-license
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OF ANY KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations under the License.
+#
+
+#------ Endpoint config -------
+
+### HTTP  ###
+# The URL the KSQL server will listen on:
+listeners=http://<%= spec.address %>:<%= p("listen_port") %>
+
+### HTTPS ###
+# To switch KSQL over to communicating using HTTPS comment out the 'listeners' line above
+# uncomment and complete the properties below.
+# See: https://docs.confluent.io/current/ksql/docs/installation/server-config/security.html#configuring-ksql-cli-for-https
+#
+# listeners=https://localhost:8088
+# ssl.keystore.location=?
+# ssl.keystore.password=?
+# ssl.key.password=?
+
+#------ Logging config -------
+
+# Automatically create the processing log topic if it does not already exist:
+ksql.logging.processing.topic.auto.create=true
+
+# Automatically create a stream within KSQL for the processing log:
+ksql.logging.processing.stream.auto.create=true
+
+# Uncomment the following if you wish the errors written to the processing log to include the
+# contents of the row that caused the error.
+# Note: care should be taken to restrict access to the processing topic if the data KSQL is
+# processing contains sensitive information.
+#ksql.logging.processing.rows.include=true
+
+#------ External service config -------
+
+# The set of Kafka brokers to bootstrap Kafka cluster information from:
+<% 
+listen_port = servers.p('listen_port')
+security_protocol = servers.p("tls.certificate", nil).nil? ? "PLAINTEXT" : "SSL" 
+if servers.p("enable_sasl_scram")
+  security_protocol = "SASL_" + security_protocol
+end
+%>
+bootstrap.servers=<%= security_protocol %>://<%= servers.instances.map { |instance| "#{instance.address}:#{listen_port}" }.join(",") %>
+
+# Uncomment and complete the following to enable KSQL's integration to the Confluent Schema Registry:
+<% schema_registry_url = "http://" + schemaRegistries.address + ":" + schemaRegistries.p("listen_port").to_s %>
+ksql.schema.registry.url=<%= schema_registry_url %>

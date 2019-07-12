@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export LOG_DIR=/var/vcap/sys/log/confluent-zookeeper
+export RUN_DIR=/var/vcap/sys/run/confluent-zookeeper
+export STORE_DIR=/var/vcap/store/confluent-zookeeper
+export DATA_DIR=/var/vcap/data/confluent-zookeeper
+export TMP_DIR=/var/vcap/data/confluent-zookeeper/tmp
+
+for dir in $LOG_DIR $RUN_DIR $DATA_DIR $STORE_DIR $TMP_DIR; do
+  mkdir -p ${dir}
+  chown vcap:vcap ${dir}
+  chmod 700 ${dir}
+done
+
+cp /var/vcap/jobs/confluent-zookeeper/config/myid ${STORE_DIR}/
+
+chown -R vcap:vcap ${STORE_DIR}

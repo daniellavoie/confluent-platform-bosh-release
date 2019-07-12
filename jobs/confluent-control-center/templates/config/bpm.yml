@@ -1,0 +1,15 @@
+---
+processes:
+- name: confluent-control-center
+  executable: /var/vcap/jobs/confluent-control-center/bin/ctl
+  args: [start]
+  ephemeral_disk: true
+  persistent_disk: true
+  env: {}
+  limits:
+    memory: 1G
+    open_files: 1024
+  additional_volumes:
+  - path: /var/vcap/data/tmp
+    writable: true
+    allow_executions: true

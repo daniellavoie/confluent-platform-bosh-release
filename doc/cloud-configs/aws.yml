@@ -1,0 +1,64 @@
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: AWZ-AZ-1
+- name: z2
+  cloud_properties:
+    availability_zone: us-east-1b
+- name: z3
+  cloud_properties:
+    availability_zone: us-east-1c
+
+vm_types:
+- name: default
+  cloud_properties:
+    security_groups:
+    - bosh
+    instance_type: t2.micro
+    ephemeral_disk:
+      size: 10000
+      type: gp2
+
+
+vm_extensions:
+- name: control-center
+  cloud_properties:
+    lb_target_groups:
+    - cp-control-center
+    security_groups:
+    - bosh
+    - control-center
+
+disk_types:
+- name: default
+  disk_size: 10_000
+- name: 100G
+  disk_size: 100_000
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - range: 10.0.11.0/24
+    gateway: 10.0.11.1
+    reserved: [10.0.11.1-10.0.11.19]
+    az: z1
+    cloud_properties:
+      subnet: subnet-0ca02f61ce8c72a04
+  - range: 10.0.12.0/24
+    gateway: 10.0.12.1
+    az: z2
+    cloud_properties:
+      subnet: subnet-0403b06d5272d9856
+  - range: 10.0.13.0/24
+    gateway: 10.0.13.1
+    az: z3
+    cloud_properties:
+      subnet: subnet-0f9412c7b708efa5a
+
+compilation:
+  workers: 1
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: default
+  network: default

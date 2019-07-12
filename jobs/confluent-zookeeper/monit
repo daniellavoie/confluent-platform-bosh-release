@@ -1,0 +1,5 @@
+check process confluent-zookeeper
+  with pidfile /var/vcap/sys/run/bpm/confluent-zookeeper/confluent-zookeeper.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start confluent-zookeeper"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop confluent-zookeeper"
+  group vcap

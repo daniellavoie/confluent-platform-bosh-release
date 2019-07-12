@@ -1,0 +1,5 @@
+check process confluent-connect
+  with pidfile /var/vcap/sys/run/bpm/confluent-connect/confluent-connect.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start confluent-connect"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop confluent-connect"
+  group vcap

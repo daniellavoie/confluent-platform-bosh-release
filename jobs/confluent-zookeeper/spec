@@ -1,0 +1,97 @@
+---
+name: confluent-zookeeper
+
+packages:
+- openjdk-8
+- confluent-platform
+
+templates:
+  bin/ctl: bin/ctl
+  bin/pre-start: bin/bpm-pre-start
+  config/bpm.yml: config/bpm.yml
+  config/configuration.xsl: config/configuration.xsl
+  config/log4j.properties: config/log4j.properties
+  config/myid.erb: config/myid
+  config/zookeeper.properties.erb: config/zookeeper.properties
+
+consumes:
+- name: peers
+  type: zookeeper_peers
+
+provides:
+- name: confluent-zookeeper
+  type: zookeeper-conn
+  properties:
+  - client_port
+- name: peers
+  type: zookeeper_peers
+  properties:
+  - client_port
+  - quorum_port
+  - leader_election_port
+
+properties:
+  listen_address:
+    description: "The address to listen for client connections"
+    default: "0.0.0.0"
+  client_port:
+    description: "The port to listen for client connections"
+    default: 2181
+  quorum_port:
+    description: "Apache Zookeeper Client quorum port"
+    default: 2888
+  leader_election_port:
+    description: "Apache Zookeeper Client leader election port"
+    default: 3888
+
+  autopurge_purge_interval:
+    description: "The time interval in hours for which the purge task has to be triggered"
+    default: 24
+  autopurge_snap_retain_count:
+    description: "Number of most recent snapshots to retain"
+    default: 3
+  cnx_timeout:
+    description: "Sets the timeout value for opening connections for leader election notifications"
+    default: 5
+  election_algorim:
+    description: "Election implementation to use"
+    default: 3
+  warning_threshold_ms:
+    description: "A warning message will be output to the log whenever an fsync in the Transactional Log (WAL) takes longer than this value"
+    default: 1000
+  global_outstanding_limit:
+    description: "Throttle outstanding client requests"
+    default: 1000
+  init_limit:
+    description: "Amount of time, in ticks, to allow followers to connect and sync to a leader"
+    default: 5
+  leader_serves:
+    description: "Leader accepts client connections"
+    default: "yes"
+  max_client_connections:
+    description: "Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble"
+    default: 60
+  max_session_timeout:
+    description: "the maximum session timeout in milliseconds that the server will allow the client to negotiate"
+    default: 40000
+  min_session_timeout:
+    description: "the minimum session timeout in milliseconds that the server will allow the client to negotiate"
+    default: 4000
+  pre_allocation_size:
+    description: "preAllocSize kilobytes for transaction log blocks"
+    default: "65536"
+  snap_count:
+    description: "Number of transactions before a snapshot is started and a new transaction log file is created"
+    default: 100000
+  sync_enabled:
+    description: "If the observers log transaction and write snapshot to disk by default like the participants"
+    default: true
+  sync_limit:
+    description: "Amount of time, in ticks, to allow followers to sync with ZooKeeper"
+    default: 2
+  tick_time:
+    description: "The length of a single tick, which is the basic time unit used by ZooKeeper, as measured in milliseconds"
+    default: 2000
+  force_sync:
+    description: "Requires updates to be synced to media of the transaction log before finishing processing the update. Setting to 'no' improves performance dramatically at the cost of losing recent commits if all nodes crash at the same time"
+    default: "yes"

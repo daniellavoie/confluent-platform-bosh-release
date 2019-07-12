@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+source /var/vcap/packages/openjdk-8/bosh/runtime.env
+
+case $1 in
+
+  start)
+    exec /var/vcap/packages/confluent-platform/bin/zookeeper-server-start \
+      /var/vcap/jobs/confluent-zookeeper/config/zookeeper.properties
+    ;;
+    
+  *)
+    echo "Usage: $0 {start}"
+    exit 1
+    ;;
+
+esac
+exit 0

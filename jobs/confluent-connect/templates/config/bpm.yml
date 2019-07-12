@@ -1,0 +1,11 @@
+---
+processes:
+- name: confluent-connect
+  executable: /var/vcap/jobs/confluent-connect/bin/ctl
+  args: [start]
+  ephemeral_disk: true
+  persistent_disk: true
+  env: {}
+  limits:
+    memory: 2G
+    open_files: 1024
