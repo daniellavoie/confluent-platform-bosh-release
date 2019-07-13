@@ -1,5 +1,5 @@
 ---
-name: confluent-platform-dev
+name: confluent-platform
 addons:
 - name: bpm
   jobs:
@@ -7,15 +7,13 @@ addons:
     release: bpm
 
 instance_groups:
-- name: confluent-platform
+- name: confluent-zookeeper
   azs: [z1, z2, z3]
-  instances: 1
+  instances: 3
   vm_resources:
-    cpu: 4
-    ram: 8192
-    ephemeral_disk_size: 10
-  vm_extensions:
-  - control-center 
+    cpu: 1
+    ram: 1024
+    ephemeral_disk_size: 10_000
   stemcell: default
   persistent_disk: 10240
   networks:
@@ -23,38 +21,76 @@ instance_groups:
   jobs:
   - name: confluent-zookeeper
     release: confluent-platform
+- name: confluent-server
+  azs: [z1, z2, z3]
+  instances: 3
+  vm_resources:
+    cpu: 2
+    ram: 4096
+    ephemeral_disk_size: 100_000
+  stemcell: default
+  persistent_disk: 10240
+  networks:
+  - name: default
+  jobs:
   - name: confluent-server
     release: confluent-platform
-    properties:
-      offsets:
-        topic:
-          replication:
-            factor: 1
-      transaction:
-        state:
-          log:
-            replication:
-              factor: 1
-            min:
-              isr: 1
-      metric_reporter:
-        replicas: 1
+- name: confluent-control-center
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 1
+    ram: 2048
+    ephemeral_disk_size: 10_000
+  stemcell: default
+  persistent_disk: 10240
+  vm_extensions:
+  - control-center 
+  networks:
+  - name: default
+  jobs:
   - name: confluent-control-center
     release: confluent-platform
+- name: confluent-schema-registry
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 1
+    ram: 2048
+    ephemeral_disk_size: 10_000
+  stemcell: default
+  persistent_disk: 10240
+  networks:
+  - name: default
+  jobs:
   - name: confluent-schema-registry
     release: confluent-platform
+- name: confluent-connect
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 1
+    ram: 2048
+    ephemeral_disk_size: 10_000
+  stemcell: default
+  persistent_disk: 10240
+  networks:
+  - name: default
+  jobs:
   - name: confluent-connect
     release: confluent-platform
-    properties:
-      config:
-        storage:
-          replication_factor: 1
-      offset:
-        storage:
-          replication_factor: 1
-      status:
-        storage:
-          replication_factor: 1
+- name: confluent-ksql
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 1
+    ram: 2048
+    ephemeral_disk_size: 10_000
+  stemcell: default
+  persistent_disk: 10240
+  networks:
+  - name: default
+  jobs:
   - name: confluent-ksql
     release: confluent-platform
 
