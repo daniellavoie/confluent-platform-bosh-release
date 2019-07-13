@@ -154,9 +154,11 @@ The following properties should be sourced from your IaaS configuration.
 | networks[name=default].subnets[0].cloud_properties.subnet | subnet-0ca02f61ce8c72a04 | Subnet ID for subnet 1 |
 | networks[name=default].subnets[1].range | 10.0.12.0/24 | CIDR for subnet 2 |
 | networks[name=default].subnets[1].gateway | 10.0.12.1 | CIDR for subnet 2 |
+| networks[name=default].subnets[1].reserved | [10.0.12.1-10.0.12.19] | Prevents Bosh from assigning IP to this range for subnet 2 |
 | networks[name=default].subnets[1].cloud_properties.subnet | subnet-0403b06d5272d9856 | Subnet ID for subnet 2 |
 | networks[name=default].subnets[2].range | 10.0.13.0/24 | CIDR for subnet 3 |
 | networks[name=default].subnets[2].gateway | 10.0.13.1 | CIDR for subnet 3 |
+| networks[name=default].subnets[2].reserved | [10.0.13.1-10.0.13.19] | Prevents Bosh from assigning IP to this range for subnet 3 |
 | networks[name=default].subnets[2].cloud_properties.subnet | subnet-0f9412c7b708efa5a | Subnet ID for subnet 3 |
 
 ```

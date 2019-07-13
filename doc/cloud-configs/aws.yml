@@ -1,7 +1,7 @@
 azs:
 - name: z1
   cloud_properties:
-    availability_zone: AWZ-AZ-1
+    availability_zone: us-east-1a
 - name: z2
   cloud_properties:
     availability_zone: us-east-1b
@@ -47,11 +47,13 @@ networks:
       subnet: subnet-0ca02f61ce8c72a04
   - range: 10.0.12.0/24
     gateway: 10.0.12.1
+    reserved: [10.0.12.1-10.0.12.19]
     az: z2
     cloud_properties:
       subnet: subnet-0403b06d5272d9856
   - range: 10.0.13.0/24
     gateway: 10.0.13.1
+    reserved: [10.0.1.1-10.0.13.19]
     az: z3
     cloud_properties:
       subnet: subnet-0f9412c7b708efa5a
