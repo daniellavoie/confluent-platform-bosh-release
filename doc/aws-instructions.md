@@ -63,6 +63,10 @@ Inbound rules :
 
 Create an elastic ip that can be assigned to the Bosh Director.
 
+### Create a TCP Load Balancer for Confluent Server
+
+TODO
+
 ### Create a Load Balancer for Control Center
 
 <strong>Target Group</strong>
@@ -86,7 +90,9 @@ A standard Ubuntu Xenial 16.04 image on a `t2.micro` instance should be enough w
 ```
 wget https://github.com/cloudfoundry/bosh-cli/releases/download/v5.5.1/bosh-cli-5.5.1-linux-amd64 && \
   chmod +x bosh-cli-* && \
-  sudo mv bosh-cli-* /usr/local/bin/bosh
+  sudo mv bosh-cli-* /usr/local/bin/bosh && \
+  sudo apt-get update && \
+  sudo apt-get install -y build-essential zlibc zlib1g-dev ruby ruby-dev openssl libxslt-dev libxml2-dev libssl-dev libreadline6 libreadline6-dev libyaml-dev libsqlite3-dev sqlite3
 ```
 
 ## Create a Bosh Director
@@ -132,6 +138,13 @@ export CREDHUB_CA_CERT="$(bosh interpolate $DIRECTOR_STORE --path=/credhub_tls/c
 
 export CREDHUB_CLIENT=credhub-admin
 export CREDHUB_SECRET=`bosh interpolate $DIRECTOR_STORE --path /credhub_admin_client_secret`
+```
+
+## Upload a Xenial Stemcell
+
+```
+bosh upload-stemcell --sha1 86c7b832c4666cfb9e84e81d21c034d1f3858642 \
+  https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-xenial-go_agent?v=315.64
 ```
 
 ## Update Cloud Config

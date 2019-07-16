@@ -35,9 +35,9 @@ This current iteration was successully tested on AWS and GCP cpis.
 
 ## Deploy single collocated VM
 
-```
+```plain
 bosh deploy confluent-platform-bosh-release/manifests/confluent-platform-solo.yml -o confluent-platform-bosh-release/manifests/operators/create.yml
-``` 
+```
 
 ## Deploy Confluent Platform Cluster
 
