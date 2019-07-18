@@ -7,7 +7,7 @@ processes:
   persistent_disk: true
   env: {}
   limits:
-    memory: 1G
+    memory: 2G
     open_files: 1024
   hooks:
     pre_start: /var/vcap/jobs/confluent-server/bin/bpm-pre-start
