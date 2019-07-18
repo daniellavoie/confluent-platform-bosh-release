@@ -9,15 +9,15 @@ addons:
 variables:
 - name: keystore-password
   type: password
-- name: confluent-server-ca
+- name: ca
   type: certificate
   options:
     is_ca: true
-    common_name: "Confluent Server Certificate Authority"
+    common_name: "Confluent Certificate Authority"
 - name: confluent-server-tls
   type: certificate
   options:
-    ca: confluent-server-ca
+    ca: ca
     common_name: "*.((confluent-server-external-host))"
 
 instance_groups:
@@ -46,7 +46,7 @@ instance_groups:
     properties:
       tls:
         ca_certs:
-        - ((confluent-server-ca.certificate))
+        - ((ca.certificate))
         certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
 - name: confluent-control-center
@@ -84,6 +84,12 @@ instance_groups:
   jobs:
   - name: confluent-connect
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
 - name: confluent-ksql
   azs: [z1, z2, z3]
   instances: 1

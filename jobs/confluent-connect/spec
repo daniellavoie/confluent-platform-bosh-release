@@ -3,8 +3,12 @@ name: confluent-connect
 
 templates:
   bin/ctl: bin/ctl
+  bin/pre-start.erb: bin/pre-start
   config/bpm.yml: config/bpm.yml
+  config/ca_certs.pem.erb: config/ca_certs.pem
+  config/cert.pem.erb: config/cert.pem
   config/connect.properties.erb: config/connect.properties
+  config/key.pem.erb: config/key.pem
 
 packages:
 - openjdk-8
@@ -47,3 +51,16 @@ properties:
   status.storage.replication_factor:
     description: Replication factor for the status topic
     default: 3
+
+  tls.ca_certs:
+    description: |
+      List of CA certs used to verify the brokers certificates
+    default: []
+
+  tls.certificate:
+    description: |
+      Certificate used in the 2 way SSL connection with the brokers.
+
+  keystore_password:
+    description: "Keystore password"
+    default: notasecret

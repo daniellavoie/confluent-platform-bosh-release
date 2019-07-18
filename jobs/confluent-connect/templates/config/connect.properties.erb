@@ -5,8 +5,13 @@
 # Confluent Platform with all services running on their default ports.
 
 # Bootstrap Kafka servers. If multiple servers are specified, they should be comma-separated.
-<% listen_port = servers.p('listen_port') %>
-bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:#{listen_port}" }.join(",") %>
+bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
+security.protocol=SSL
+ssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks
+ssl.truststore.password=<%= p("keystore_password") %>
+ssl.keystore.location=/var/vcap/jobs/confluent-connect/config/generated.keystore.jks
+ssl.keystore.password=<%= p("keystore_password") %>
+ssl.key.password=<%= p("keystore_password") %>
 
 # The group ID is a unique identifier for the set of workers that form a single Kafka Connect
 # cluster
