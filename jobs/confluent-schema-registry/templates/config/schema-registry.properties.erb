@@ -42,7 +42,7 @@ if servers.p("enable_sasl_scram")
   security_protocol = "SASL_" + security_protocol
 end
 %>
-kafkastore.bootstrap.servers=<%= security_protocol %>://<%= servers.instances.map { |instance| "#{instance.address}:#{listen_port}" }.join(",") %>
+kafkastore.bootstrap.servers=PLAINTEXT://<%= servers.instances.map { |instance| "#{instance.address}:9092" }.join(",") %>
 
 # The name of the topic to store schemas in
 kafkastore.topic=<%= p("topic") %>

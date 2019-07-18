@@ -7,8 +7,7 @@
 
 confluent.controlcenter.rest.listeners=http://0.0.0.0:<%= p("listen_port") %>
 
-<% server_listen_port = servers.p('listen_port') %>
-bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:#{server_listen_port}" }.join(",") %>
+bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
 
 # location for Control Center data
 confluent.controlcenter.data.dir=/var/vcap/store/confluent-control-center
