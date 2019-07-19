@@ -3,7 +3,11 @@ name: confluent-schema-registry
 
 templates:
   bin/ctl: bin/ctl
+  bin/pre-start.erb: bin/pre-start
   config/bpm.yml: config/bpm.yml
+  config/ca_certs.pem.erb: config/ca_certs.pem
+  config/cert.pem.erb: config/cert.pem
+  config/key.pem.erb: config/key.pem
   config/schema-registry.properties.erb: config/schema-registry.properties
 
 consumes:
@@ -32,3 +36,16 @@ properties:
   debug:
     description: If true, API requests that fail will include extra debugging information, including stack traces
     default: false
+
+  tls.ca_certs:
+    description: |
+      List of CA certs used to verify the brokers certificates
+    default: []
+
+  tls.certificate:
+    description: |
+      Certificate used in the 2 way SSL connection with the brokers.
+
+  keystore_password:
+    description: "Keystore password"
+    default: notasecret
