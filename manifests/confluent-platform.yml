@@ -73,6 +73,12 @@ instance_groups:
   jobs:
   - name: confluent-schema-registry
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
 - name: confluent-connect
   azs: [z1, z2, z3]
   instances: 1
