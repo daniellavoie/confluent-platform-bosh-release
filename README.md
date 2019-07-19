@@ -27,7 +27,7 @@ Long story short, Bosh let you declare a desired state of your software and the 
 
 ** THIS IS FAR FROM BEING PRODUCTION READY **
 
-* SASL/SCRAM and TLS to be implemented
+* SASL/SCRAM to be implemented
 
 ## Tested IaaS
 
