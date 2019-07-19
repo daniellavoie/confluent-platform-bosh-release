@@ -55,7 +55,13 @@ if servers.p("enable_sasl_scram")
   security_protocol = "SASL_" + security_protocol
 end
 %>
-bootstrap.servers=<%= security_protocol %>://<%= servers.instances.map { |instance| "#{instance.address}:#{listen_port}" }.join(",") %>
+bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
+security.protocol=SSL
+ssl.truststore.location=/var/vcap/jobs/confluent-ksql/config/generated.truststore.jks
+ssl.truststore.password=<%= p("keystore_password") %>
+ssl.keystore.location=/var/vcap/jobs/confluent-ksql/config/generated.keystore.jks
+ssl.keystore.password=<%= p("keystore_password") %>
+ssl.key.password=<%= p("keystore_password") %>
 
 # Uncomment and complete the following to enable KSQL's integration to the Confluent Schema Registry:
 <% schema_registry_url = "http://" + schemaRegistries.address + ":" + schemaRegistries.p("listen_port").to_s %>

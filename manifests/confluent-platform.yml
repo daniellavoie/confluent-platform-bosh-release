@@ -101,6 +101,12 @@ instance_groups:
   jobs:
   - name: confluent-ksql
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
 
 stemcells:
 - alias: default
