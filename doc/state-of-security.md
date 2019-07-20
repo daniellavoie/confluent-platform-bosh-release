@@ -4,6 +4,7 @@
   - [ ] Brokers to brokers
     - [X] SSL
     - [ ] Authentication
+  - [ ] ACL
   - [ ] Metric reporter
     - [X] SSL
     - [ ] Authentication
@@ -36,10 +37,10 @@
     - [ ] Authentication
   - [ ] Rest API
     - [ ] SSL
-    - [ ] Authentication
   - [ ] Interceptors
     - [ ] SSL
     - [ ] Authentication
+  - [ ] Security plugin
 
 - [ ] Zookeeper
   - [ ] Authentication
