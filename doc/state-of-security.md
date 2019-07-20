@@ -2,45 +2,90 @@
 
 - [ ] Broker
   - [ ] Brokers to brokers
-    - [X] SSL
+    - [X] Encryption
     - [ ] Authentication
-  - [ ] ACL
   - [ ] Metric reporter
-    - [X] SSL
+    - [X] Encryption
     - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
 
 - [ ] Connect
   - [ ] Workers to Brokers
-    - [X] SSL
+    - [X] Encryption
     - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
   - [ ] Rest API
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] RBAC
   - [ ] Interceptors
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
 
 - [ ] KSQL
-  - [ ] Nodes to Brokers
-    - [X] SSL
+  - [ ] KSQL nodes to Brokers
+    - [X] Encryption
     - [ ] Authentication
+    - [ ] ACL
   - [ ] Rest API
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+  - [ ] Schema Registry
+    - [ ] Encryption
+    - [ | Authentication
   - [ ] Interceptors
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] ACL
 
 - [ ] Schema Registry
   - [ ] Schema registry to Brokers
-    - [X] SSL
+    - [X] Encryption
     - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
   - [ ] Rest API
-    - [ ] SSL
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] RBAC
   - [ ] Interceptors
     - [ ] SSL
     - [ ] Authentication
-  - [ ] Security plugin
+    - [ ] ACL
+    - [ ] RBAC
+
+- [ ] Control Center
+  - [ ]| Rest API
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Brokers
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Connect
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] KSQL
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Schema Registry
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ | Zookeeper
+    - [ ] Authentication
 
 - [ ] Zookeeper
   - [ ] Authentication
