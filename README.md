@@ -29,6 +29,10 @@ Long story short, Bosh let you declare a desired state of your software and the 
 
 * SASL/SCRAM to be implemented
 
+## State of security
+
+A lot of security features are to be implemented. For a complete state of the bits that still requires implement, refers to the [state of security](doc/state-of-security.md) doc section.
+
 ## Tested IaaS
 
 This current iteration was successully tested on AWS and GCP cpis.
