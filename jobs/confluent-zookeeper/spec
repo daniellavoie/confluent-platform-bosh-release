@@ -8,6 +8,7 @@ packages:
 templates:
   bin/ctl: bin/ctl
   bin/pre-start: bin/bpm-pre-start
+  bin/post-deploy.erb: bin/post-deploy
   config/bpm.yml: config/bpm.yml
   config/configuration.xsl: config/configuration.xsl
   config/log4j.properties: config/log4j.properties
@@ -95,3 +96,13 @@ properties:
   force_sync:
     description: "Requires updates to be synced to media of the transaction log before finishing processing the update. Setting to 'no' improves performance dramatically at the cost of losing recent commits if all nodes crash at the same time"
     default: "yes"
+  
+  jaas.users:
+    description: |-
+      List of users to create
+      ksql:
+        username: test
+        password: password
+      control-center:
+        username: test
+        password: password

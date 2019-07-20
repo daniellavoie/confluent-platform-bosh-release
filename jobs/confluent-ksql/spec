@@ -43,3 +43,9 @@ properties:
   keystore_password:
     description: "Keystore password"
     default: notasecret
+
+  jaas.username:
+    description: "Username used in JAAS configuration"
+
+  jaas.password:
+    description: "Password used in JAAS configuration"

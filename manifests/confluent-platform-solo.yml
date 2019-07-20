@@ -37,8 +37,11 @@ instance_groups:
               factor: 1
             min:
               isr: 1
-      metric_reporter:
+      metric:
         replicas: 1
+        jaas:
+          username: metric
+          password: ((metric-jaas-password))
   - name: confluent-control-center
     release: confluent-platform
   - name: confluent-schema-registry

@@ -32,15 +32,17 @@ delete.topic.enable=<%= p("delete_topic") %>
 #     listeners = security_protocol://host_name:port
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
-<% 
-security_protocol = p("tls.certificate", nil).nil? ? "PLAINTEXT" : "SSL" 
-if p("enable_sasl_scram")
-  security_protocol = "SASL_" + security_protocol
-end
-%>
-listeners=PLAINTEXT://<%= spec.address %>:9092,<%= security_protocol %>://<%= spec.address %>:9093
-security.inter.broker.protocol=<%= security_protocol %>
-<% if_p("tls.certificate") do  %>
+
+listeners=PLAINTEXT://<%= spec.address %>:9092,SASL_SSL://<%= spec.address %>:9093
+security.inter.broker.protocol=SASL_SSL
+
+sasl.enabled.mechanisms=SCRAM-SHA-512
+sasl.mechanism=SCRAM-SHA-512
+sasl.mechanism.inter.broker.protocol=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+username="<%= p("jaas.username") %>" \
+password="<%= p("jaas.password") %>";
+
 ssl.keystore.location=/var/vcap/jobs/confluent-server/config/generated.keystore.jks
 ssl.keystore.password=<%= p("keystore_password") %>
 ssl.keystore.type=PKCS12
@@ -48,12 +50,7 @@ ssl.key.password=<%= p("keystore_password") %>
 ssl.truststore.location=/var/vcap/jobs/confluent-server/config/generated.truststore.jks
 ssl.truststore.password=<%= p("keystore_password") %>
 ssl.truststore.type=PKCS12
-<% end %>
 
-<% if p("enable_sasl_scram") %>
-sasl.enabled.mechanisms=SCRAM-SHA-256,SCRAM-SHA-512
-sasl.mechanism.inter.broker.protocol=SCRAM-SHA-256
-<% end %>
 
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
@@ -156,7 +153,7 @@ zookeeper.connect=<%= zks.instances.map { |instance| "#{instance.address}:#{zk_p
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=6000
 
-<% if p("metric_reporter.enable") %>
+<% if p("metric.enable") %>
 ##################### Confluent Metrics Reporter #######################
 # Confluent Control Center and Confluent Auto Data Balancer integration
 #
@@ -165,17 +162,21 @@ zookeeper.connection.timeout.ms=6000
 # If you are using a dedicated metrics cluster, also adjust the settings
 # to point to your metrics Kafka cluster.
 metric.reporters=io.confluent.metrics.reporter.ConfluentMetricsReporter
-confluent.metrics.reporter.bootstrap.servers=<%= p("metric_reporter.bootstrap_servers", spec.address + ":9093") %>
-confluent.metrics.reporter.topic.replicas=<%= p("metric_reporter.replicas") %>
 
-<%   if_p("tls.certificate") do  %>
-confluent.metrics.reporter.security.protocol=SSL
+confluent.metrics.reporter.bootstrap.servers=<%= p("metric.bootstrap_servers", spec.address + ":9093") %>
+confluent.metrics.reporter.topic.replicas=<%= p("metric.replicas") %>
+
+confluent.metrics.reporter.sasl.mechanism=SCRAM-SHA-512
+confluent.metrics.reporter.security.protocol=SASL_SSL
+
+confluent.metrics.reporter.ssl.key.password=<%= p("keystore_password") %>
+
 confluent.metrics.reporter.ssl.truststore.location=/var/vcap/jobs/confluent-server/config/generated.truststore.jks
 confluent.metrics.reporter.ssl.truststore.password=<%= p("keystore_password") %>
 confluent.metrics.reporter.ssl.truststore.type=PKCS12
+
 confluent.metrics.reporter.ssl.keystore.location=/var/vcap/jobs/confluent-server/config/generated.keystore.jks
 confluent.metrics.reporter.ssl.keystore.password=<%= p("keystore_password") %>
 confluent.metrics.reporter.ssl.keystore.type=PKCS12
-confluent.metrics.reporter.ssl.key.password=<%= p("keystore_password") %>
-<%   end
-   end %>
+
+<% end %>

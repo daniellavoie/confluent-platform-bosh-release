@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source /var/vcap/packages/openjdk-8/bosh/runtime.env
+export PATH=$JAVA_HOME/bin:/var/vcap/packages/confluent-platform/bin:$PATH
+
+export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/var/vcap/jobs/confluent-zookeeper/config/log4j.properties"
+export LOG_DIR=/var/vcap/sys/log/confluent-zookeeper
+
+<% zk_port = p('client_port').to_s %>
+
+<% p("jaas.users").each_value do |user| %>
+kafka-configs \
+  --zookeeper <%= spec.address + ":" + zk_port %> \ \
+  --alter \
+  --add-config 'SCRAM-SHA-512=[password=<%= user["password"] %>]' \
+  --entity-type users \
+  --entity-name <%= user["username"] %>
+<% end %>

@@ -19,6 +19,18 @@ variables:
   options:
     ca: ca
     common_name: "*.((confluent-server-external-host))"
+- name: server-jaas-password
+  type: password
+- name: metric-jaas-password
+  type: password
+- name: connect-jaas-password
+  type: password
+- name: control-center-jaas-password
+  type: password
+- name: ksql-jaas-password
+  type: password
+- name: schema-registry-jaas-password
+  type: password
 
 instance_groups:
 - name: confluent-zookeeper
@@ -32,6 +44,27 @@ instance_groups:
   jobs:
   - name: confluent-zookeeper
     release: confluent-platform
+    properties:
+      jaas:
+        users:
+          server:
+            username: server
+            password: ((server-jaas-password))
+          metric:
+            username: metric
+            password: ((metric-jaas-password))
+          connect:
+            username: connect
+            password: ((connect-jaas-password))
+          control-center:
+            username: control-center
+            password: ((control-center-jaas-password))
+          ksql:
+            username: ksql
+            password: ((ksql-jaas-password))
+          schema-registry:
+            username: schema-registry
+            password: ((schema-registry-jaas-password))
 - name: confluent-server
   azs: [z1, z2, z3]
   instances: 3
@@ -49,6 +82,13 @@ instance_groups:
         - ((ca.certificate))
         certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
+      jaas:
+        username: server
+        password: ((server-jaas-password))
+      metric:
+        jaas:
+          username: metric
+          password: ((metric-jaas-password))
 - name: confluent-control-center
   azs: [z1, z2, z3]
   instances: 1
@@ -62,6 +102,15 @@ instance_groups:
   jobs:
   - name: confluent-control-center
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
+      jaas:
+        username: control-center
+        password: ((control-center-jaas-password))
 - name: confluent-schema-registry
   azs: [z1, z2, z3]
   instances: 1
@@ -79,6 +128,9 @@ instance_groups:
         - ((ca.certificate))
         certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
+      jaas:
+        username: schema-registry
+        password: ((schema-registry-jaas-password))
 - name: confluent-connect
   azs: [z1, z2, z3]
   instances: 1
@@ -96,6 +148,9 @@ instance_groups:
         - ((ca.certificate))
         certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
+      jaas:
+        username: connect
+        password: ((connect-jaas-password))
 - name: confluent-ksql
   azs: [z1, z2, z3]
   instances: 1
@@ -113,6 +168,9 @@ instance_groups:
         - ((ca.certificate))
         certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
+      jaas:
+        username: ksql
+        password: ((ksql-jaas-password))
 
 stemcells:
 - alias: default

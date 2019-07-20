@@ -1,44 +1,90 @@
 # State of security implementation
 
 - [ ] Broker
-  - [ ] Brokers to brokers
-    - [X] SSL
-    - [ ] Authentication
+  - [X] Brokers to brokers
+    - [X] Encryption
+    - [X] Authentication
   - [ ] Metric reporter
-    - [X] SSL
-    - [ ] Authentication
+    - [X] Encryption
+    - [X] Authentication
+    - [ ] ACL
+    - [ ] RBAC
 
 - [ ] Connect
   - [ ] Workers to Brokers
-    - [X] SSL
-    - [ ] Authentication
+    - [X] Encryption
+    - [X] Authentication
+    - [ ] ACL
+    - [ ] RBAC
   - [ ] Rest API
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] RBAC
   - [ ] Interceptors
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
 
 - [ ] KSQL
-  - [ ] Nodes to Brokers
-    - [X] SSL
-    - [ ] Authentication
+  - [ ] KSQL nodes to Brokers
+    - [X] Encryption
+    - [X] Authentication
+    - [ ] ACL
   - [ ] Rest API
-    - [ ] SSL
+    - [ ] Encryption
+    - [ ] Authentication
+  - [ ] Schema Registry
+    - [ ] Encryption
     - [ ] Authentication
   - [ ] Interceptors
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] ACL
 
 - [ ] Schema Registry
   - [ ] Schema registry to Brokers
-    - [X] SSL
-    - [ ] Authentication
+    - [X] Encryption
+    - [X] Authentication
+    - [ ] ACL
+    - [ ] RBAC
   - [ ] Rest API
-    - [ ] SSL
+    - [ ] Encryption
     - [ ] Authentication
+    - [ ] RBAC
   - [ ] Interceptors
     - [ ] SSL
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+
+- [ ] Control Center
+  - [ ] Rest API
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Brokers
+    - [X] Encryption
+    - [X] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Connect
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] KSQL
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Schema Registry
+    - [ ] Encryption
+    - [ ] Authentication
+    - [ ] ACL
+    - [ ] RBAC
+  - [ ] Zookeeper
     - [ ] Authentication
 
 - [ ] Zookeeper

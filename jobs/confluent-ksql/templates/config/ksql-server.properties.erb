@@ -48,15 +48,15 @@ ksql.logging.processing.stream.auto.create=true
 #------ External service config -------
 
 # The set of Kafka brokers to bootstrap Kafka cluster information from:
-<% 
-listen_port = servers.p('listen_port')
-security_protocol = servers.p("tls.certificate", nil).nil? ? "PLAINTEXT" : "SSL" 
-if servers.p("enable_sasl_scram")
-  security_protocol = "SASL_" + security_protocol
-end
-%>
 bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
-security.protocol=SSL
+
+security.protocol=SASL_SSL
+
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+  username="<%= p("jaas.username") %>" \
+  password="<%= p("jaas.password") %>";
+
 ssl.truststore.location=/var/vcap/jobs/confluent-ksql/config/generated.truststore.jks
 ssl.truststore.password=<%= p("keystore_password") %>
 ssl.keystore.location=/var/vcap/jobs/confluent-ksql/config/generated.keystore.jks
