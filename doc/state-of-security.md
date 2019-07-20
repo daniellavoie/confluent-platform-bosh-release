@@ -36,7 +36,7 @@
     - [ ] Authentication
   - [ ] Schema Registry
     - [ ] Encryption
-    - [ | Authentication
+    - [ ] Authentication
   - [ ] Interceptors
     - [ ] Encryption
     - [ ] Authentication
@@ -71,20 +71,20 @@
     - [ ] RBAC
   - [ ] Connect
     - [ ] Encryption
-    - [ ] Authentication
+    - [ ] Authentication
     - [ ] ACL
     - [ ] RBAC
   - [ ] KSQL
     - [ ] Encryption
-    - [ ] Authentication
+    - [ ] Authentication
     - [ ] ACL
     - [ ] RBAC
   - [ ] Schema Registry
     - [ ] Encryption
-    - [ ] Authentication
+    - [ ] Authentication
     - [ ] ACL
     - [ ] RBAC
-  - [ | Zookeeper
+  - [ ] Zookeeper
     - [ ] Authentication
 
 - [ ] Zookeeper
