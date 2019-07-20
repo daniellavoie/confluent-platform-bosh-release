@@ -59,7 +59,7 @@
     - [ ] RBAC
 
 - [ ] Control Center
-  - [ ]| Rest API
+  - [ ] Rest API
     - [ ] Encryption
     - [ ] Authentication
     - [ ] ACL
