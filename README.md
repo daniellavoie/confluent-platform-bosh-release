@@ -27,7 +27,7 @@ Long story short, Bosh let you declare a desired state of your software and the 
 
 ** THIS IS FAR FROM BEING PRODUCTION READY **
 
-* SASL/SCRAM to be implemented
+* End to end security is half way implemented.
 
 ## State of security
 
