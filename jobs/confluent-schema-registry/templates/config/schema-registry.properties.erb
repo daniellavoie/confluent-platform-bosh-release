@@ -35,15 +35,15 @@ listeners=http://<%= spec.address %>:<%= p("listen_port") %>
 # (Note that you cannot mix the two modes; use this mode only on new deployments or by shutting down
 # all instances, switching to the new configuration, and then starting the schema registry
 # instances again.)
-<% 
-listen_port = servers.p('listen_port')
-security_protocol = servers.p("tls.certificate", nil).nil? ? "PLAINTEXT" : "SSL" 
-if servers.p("enable_sasl_scram")
-  security_protocol = "SASL_" + security_protocol
-end
-%>
-kafkastore.bootstrap.servers=SSL://<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
-kafkastore.security.protocol=SSL
+kafkastore.bootstrap.servers=SASL_SSL://<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
+
+kafkastore.security.protocol=SASL_SSL
+kafkastore.sasl.mechanism=SCRAM-SHA-512
+
+kafkastore.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+  username="<%= p("jaas.username") %>" \
+  password="<%= p("jaas.password") %>";
+
 kafkastore.ssl.truststore.location=/var/vcap/jobs/confluent-schema-registry/config/generated.truststore.jks
 kafkastore.ssl.truststore.password=<%= p("keystore_password") %>
 kafkastore.ssl.truststore.type=PKCS12

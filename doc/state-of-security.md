@@ -1,19 +1,19 @@
 # State of security implementation
 
 - [ ] Broker
-  - [ ] Brokers to brokers
+  - [X] Brokers to brokers
     - [X] Encryption
-    - [ ] Authentication
+    - [X] Authentication
   - [ ] Metric reporter
     - [X] Encryption
-    - [ ] Authentication
+    - [X] Authentication
     - [ ] ACL
     - [ ] RBAC
 
 - [ ] Connect
   - [ ] Workers to Brokers
     - [X] Encryption
-    - [ ] Authentication
+    - [X] Authentication
     - [ ] ACL
     - [ ] RBAC
   - [ ] Rest API
@@ -29,7 +29,7 @@
 - [ ] KSQL
   - [ ] KSQL nodes to Brokers
     - [X] Encryption
-    - [ ] Authentication
+    - [X] Authentication
     - [ ] ACL
   - [ ] Rest API
     - [ ] Encryption
@@ -45,7 +45,7 @@
 - [ ] Schema Registry
   - [ ] Schema registry to Brokers
     - [X] Encryption
-    - [ ] Authentication
+    - [X] Authentication
     - [ ] ACL
     - [ ] RBAC
   - [ ] Rest API
@@ -65,8 +65,8 @@
     - [ ] ACL
     - [ ] RBAC
   - [ ] Brokers
-    - [ ] Encryption
-    - [ ] Authentication
+    - [X] Encryption
+    - [X] Authentication
     - [ ] ACL
     - [ ] RBAC
   - [ ] Connect

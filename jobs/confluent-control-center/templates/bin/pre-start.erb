@@ -6,7 +6,7 @@ set -o pipefail
 source /var/vcap/packages/openjdk-8/bosh/runtime.env
 export PATH=$PATH:/var/vcap/packages/confluent-platform/bin:$PATH
 
-CONFIG_DIR=/var/vcap/jobs/confluent-server/config
+CONFIG_DIR=/var/vcap/jobs/confluent-control-center/config
 KEY_TOOL=$JAVA_HOME/bin/keytool
 KEYSTORE_PASSWORD=<%= p("keystore_password") %>
 
@@ -14,6 +14,7 @@ TRUST_STORE=$CONFIG_DIR/generated.truststore.jks
 KEY_STORE=$CONFIG_DIR/generated.keystore.jks
 P12_STORE=$CONFIG_DIR/generated.key.p12
 
+<% if_p("tls.certificate") do %>
 echo "removing any old generated files"
 rm -f $TRUST_STORE $KEY_STORE $P12_STORE
 
@@ -46,3 +47,4 @@ $KEY_TOOL -importkeystore \
   -srcstorepass $KEYSTORE_PASSWORD \
   -srckeypass $KEYSTORE_PASSWORD \
   -alias localhost
+<% end %>

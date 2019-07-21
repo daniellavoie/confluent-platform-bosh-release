@@ -6,7 +6,14 @@
 
 # Bootstrap Kafka servers. If multiple servers are specified, they should be comma-separated.
 bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
-security.protocol=SSL
+
+security.protocol=SASL_SSL
+
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+username="<%= p("jaas.username") %>" \
+password="<%= p("jaas.password") %>";
+
 ssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks
 ssl.truststore.password=<%= p("keystore_password") %>
 ssl.keystore.location=/var/vcap/jobs/confluent-connect/config/generated.keystore.jks

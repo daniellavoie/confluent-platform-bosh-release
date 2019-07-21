@@ -8,4 +8,4 @@ processes:
   env: {}
   limits:
     memory: 2G
-    open_files: 1024
+    open_files: 2048
