@@ -18,7 +18,12 @@ variables:
   type: certificate
   options:
     ca: ca
-    common_name: "*.((confluent-server-external-host))"
+    common_name: "*.confluent-server.default.confluent-platform.bosh"
+- name: control-center-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((control-center-external-domain))"
 - name: server-jaas-password
   type: password
 - name: metric-jaas-password
@@ -107,6 +112,7 @@ instance_groups:
         ca_certs:
         - ((ca.certificate))
         certificate: ((confluent-server-tls))
+        https_certificate: ((control-center-tls))
       keystore_password: ((keystore-password))
       jaas:
         username: control-center

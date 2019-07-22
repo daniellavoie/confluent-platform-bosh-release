@@ -12,11 +12,11 @@ KEYSTORE_PASSWORD=<%= p("keystore_password") %>
 
 TRUST_STORE=$CONFIG_DIR/generated.truststore.jks
 KEY_STORE=$CONFIG_DIR/generated.keystore.jks
+HTTPS_KEY_STORE=$CONFIG_DIR/generated.https.keystore.jks
 P12_STORE=$CONFIG_DIR/generated.key.p12
 
-<% if_p("tls.certificate") do %>
 echo "removing any old generated files"
-rm -f $TRUST_STORE $KEY_STORE $P12_STORE
+rm -f $TRUST_STORE $KEY_STORE $HTTPS_KEY_STORE $P12_STORE
 
 echo "writing trust store"
 $KEY_TOOL \
@@ -47,4 +47,28 @@ $KEY_TOOL -importkeystore \
   -srcstorepass $KEYSTORE_PASSWORD \
   -srckeypass $KEYSTORE_PASSWORD \
   -alias localhost
+
+echo "converting https key/cert into PKCS12"
+openssl pkcs12 \
+  -export \
+  -in $CONFIG_DIR/https.cert.pem \
+  -inkey $CONFIG_DIR/https.key.pem \
+  -out $P12_STORE \
+  -password pass:$KEYSTORE_PASSWORD \
+  -name localhost
+
+echo "writing https key store"
+$KEY_TOOL -importkeystore \
+  -deststorepass $KEYSTORE_PASSWORD \
+  -destkeypass $KEYSTORE_PASSWORD \
+  -destkeystore $HTTPS_KEY_STORE \
+  -deststoretype PKCS12 \
+  -srckeystore $P12_STORE \
+  -srcstoretype PKCS12 \
+  -srcstorepass $KEYSTORE_PASSWORD \
+  -srckeypass $KEYSTORE_PASSWORD \
+  -alias localhost
 <% end %>
+
+echo "removing generated files"
+rm -f $TRUST_STORE $KEY_STORE $HTTPS_KEY_STORE $P12_STORE

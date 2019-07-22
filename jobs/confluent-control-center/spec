@@ -50,6 +50,10 @@ properties:
     description: |
       Certificate used in the 2 way SSL connection with the brokers.
 
+  tls.https_certificate
+    description |
+      Certificate served by the https API of Control Center
+
   keystore_password:
     description: "Keystore password"
     default: notasecret

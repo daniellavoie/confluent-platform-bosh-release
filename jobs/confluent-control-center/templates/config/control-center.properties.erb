@@ -5,7 +5,12 @@
 <% ksql = link('confluent-ksql') %>
 <% registry = link('confluent-schema-registry') %>
 
-confluent.controlcenter.rest.listeners=http://0.0.0.0:<%= p("listen_port") %>
+confluent.controlcenter.rest.listeners=https://0.0.0.0:<%= p("listen_port") %>
+confluent.controlcenter.rest.ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.https.keystore.jks
+confluent.controlcenter.rest.ssl.keystore.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.ssl.key.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+confluent.controlcenter.rest.ssl.truststore.password=<%= p("keystore_password") %>
 
 bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
 
