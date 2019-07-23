@@ -1,4 +1,6 @@
-# Output SSL Handshake info from running component
+# Security Cheatsheet
+
+## Output SSL Handshake info from running component
 
 Add the following JVM param to the component you are looking to debug:
 
@@ -6,7 +8,7 @@ Add the following JVM param to the component you are looking to debug:
 -Djava.net.debug=all
 ```
 
-# Security Cheatsheet
+## Setting variables
 
 CONFIG_DIR=/var/vcap/jobs/confluent-connect/config
 KEY_TOOL=$JAVA_HOME/bin/keytool
@@ -16,7 +18,7 @@ TRUST_STORE=$CONFIG_DIR/generated.truststore.jks
 KEY_STORE=$CONFIG_DIR/generated.keystore.jks
 P12_STORE=$CONFIG_DIR/generated.key.p12
 
-# Writing trust store
+## Writing trust store
 
 ```
 $KEY_TOOL \
@@ -28,7 +30,7 @@ $KEY_TOOL \
   -file $CONFIG_DIR/ca_certs.pem
 ```
 
-# Converting key/cert into PKCS12"
+## Converting key/cert into PKCS12"
 
 ```
 openssl pkcs12 \
@@ -40,7 +42,7 @@ openssl pkcs12 \
   -name localhost
 ```
 
-# Writing key store
+## Writing key store
 
 ```
 $KEY_TOOL -importkeystore \
@@ -55,7 +57,7 @@ $KEY_TOOL -importkeystore \
   -alias localhost
 ```
 
-# Test a certificate served by a socket
+## Test a certificate served by a socket
 
 ```
 export URL=my-service:port
