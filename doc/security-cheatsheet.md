@@ -26,7 +26,7 @@ $KEY_TOOL \
   -keystore $TRUST_STORE \
   -storetype PKCS12 \
   -file $CONFIG_DIR/ca_certs.pem
-``` 
+```
 
 # Converting key/cert into PKCS12"
 
