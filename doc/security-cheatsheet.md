@@ -10,6 +10,7 @@ Add the following JVM param to the component you are looking to debug:
 
 ## Setting variables
 
+```
 CONFIG_DIR=/var/vcap/jobs/confluent-connect/config
 KEY_TOOL=$JAVA_HOME/bin/keytool
 KEYSTORE_PASSWORD=<%= p("keystore_password") %>
@@ -17,6 +18,7 @@ KEYSTORE_PASSWORD=<%= p("keystore_password") %>
 TRUST_STORE=$CONFIG_DIR/generated.truststore.jks
 KEY_STORE=$CONFIG_DIR/generated.keystore.jks
 P12_STORE=$CONFIG_DIR/generated.key.p12
+```
 
 ## Writing trust store
 
