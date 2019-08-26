@@ -17,6 +17,13 @@ confluent.controlcenter.data.dir=/var/vcap/store/confluent-control-center
 confluent.license=<%= p("confluent.license") %>
 <% end %>
 
+sasl.mechanism.inter.broker.protocol=SSL
+ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+ssl.keystore.password=<%= p("keystore_password") %>
+ssl.key.password=<%= p("keystore_password") %>
+ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+ssl.truststore.password=<%= p("keystore_password") %>
+
 confluent.controlcenter.streams.security.protocol=SASL_SSL
 confluent.controlcenter.streams.sasl.mechanism=SCRAM-SHA-512
 confluent.controlcenter.streams.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="<%= p("jaas.username") %>" password="<%= p("jaas.password") %>";
@@ -38,7 +45,7 @@ confluent.controlcenter.internal.topics.replication=<%= replication %>
 
 # A comma separated list of Connect host names
 <% connect_listen_port = connect.p('listen_port') %>
-confluent.controlcenter.connect.cluster=<%= connect.instances.map { |instance| "http://#{instance.address}:#{connect_listen_port}" }.join(",") %>
+confluent.controlcenter.connect.cluster=<%= connect.instances.map { |instance| "https://#{instance.address}:8443" }.join(",") %>
 
 # KSQL cluster URL
 <% ksql_listen_port = ksql.p('listen_port') %>

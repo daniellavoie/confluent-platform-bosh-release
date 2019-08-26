@@ -19,6 +19,11 @@ variables:
   options:
     ca: ca
     common_name: "*.((confluent-server-external-host))"
+- name: confluent-connect-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-connect-external-host))"
 - name: server-jaas-password
   type: password
 - name: metric-jaas-password
@@ -146,7 +151,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-connect-tls))
       keystore_password: ((keystore-password))
       jaas:
         username: connect
