@@ -19,6 +19,16 @@ variables:
   options:
     ca: ca
     common_name: "*.((confluent-server-external-host))"
+- name: confluent-connect-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-connect-external-host))"
+- name: confluent-control-center-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-control-center-external-host))"
 - name: server-jaas-password
   type: password
 - name: metric-jaas-password
@@ -106,7 +116,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-control-center-tls))
       keystore_password: ((keystore-password))
       jaas:
         username: control-center
@@ -146,7 +156,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-connect-tls))
       keystore_password: ((keystore-password))
       jaas:
         username: connect
@@ -193,9 +203,7 @@ releases:
   url: https://confluent-platform-bosh-release.s3.amazonaws.com/bpm/bpm-release-1.1.0.tgz
   version: 1.1.0
 - name: confluent-platform
-  sha1: a1531cd6410a4b9dda2014906cbee633b485a3c7
   stemcell:
     os: ubuntu-xenial
     version: "315.61"
-  url: https://s3.amazonaws.com/kafka-boshrelease/compiled-releases/kafka/kafka-2.2.3-ubuntu-xenial-250.23-20190323-023747-677211024-20190323023753.tgz
-  version: 5.2.1
+  version: 5.3.0

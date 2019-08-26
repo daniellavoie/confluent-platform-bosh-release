@@ -2,4 +2,4 @@
 name: confluent-platform
 dependencies: []
 files:
-- confluent-platform/confluent-*
+- confluent-platform/confluent-*.zip

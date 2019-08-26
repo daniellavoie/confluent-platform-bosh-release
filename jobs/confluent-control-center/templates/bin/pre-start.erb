@@ -10,6 +10,8 @@ CONFIG_DIR=/var/vcap/jobs/confluent-control-center/config
 KEY_TOOL=$JAVA_HOME/bin/keytool
 KEYSTORE_PASSWORD=<%= p("keystore_password") %>
 
+echo "whoami: $(whoami)"
+
 TRUST_STORE=$CONFIG_DIR/generated.truststore.jks
 KEY_STORE=$CONFIG_DIR/generated.keystore.jks
 P12_STORE=$CONFIG_DIR/generated.key.p12
@@ -19,6 +21,9 @@ echo "removing any old generated files"
 rm -f $TRUST_STORE $KEY_STORE $P12_STORE
 
 echo "writing trust store"
+
+ls -l $CONFIG_DIR/ 
+
 $KEY_TOOL \
   -noprompt \
   -import \
@@ -27,14 +32,26 @@ $KEY_TOOL \
   -storetype PKCS12 \
   -file $CONFIG_DIR/ca_certs.pem
 
+RETURN_CODE=$?
+if [ $RETURN_CODE -ne 0 ]; then
+  echo "Error while writing trust store"
+  exit $RETURN_CODE
+fi
+
 echo "converting key/cert into PKCS12"
-openssl pkcs12 \
+strace openssl pkcs12 \
   -export \
   -in $CONFIG_DIR/cert.pem \
   -inkey $CONFIG_DIR/key.pem \
   -out $P12_STORE \
   -password pass:$KEYSTORE_PASSWORD \
   -name localhost
+
+RETURN_CODE=$?
+if [ $RETURN_CODE -ne 0 ]; then
+  echo "Error while converting key/cert into PKCS12"
+  exit $RETURN_CODE
+fi
 
 echo "writing key store"
 $KEY_TOOL -importkeystore \
@@ -47,4 +64,10 @@ $KEY_TOOL -importkeystore \
   -srcstorepass $KEYSTORE_PASSWORD \
   -srckeypass $KEYSTORE_PASSWORD \
   -alias localhost
+
+RETURN_CODE=$?
+if [ $RETURN_CODE -ne 0 ]; then
+  echo "Error while writing key store"
+  exit $RETURN_CODE
+fi
 <% end %>

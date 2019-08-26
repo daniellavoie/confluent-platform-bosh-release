@@ -25,6 +25,7 @@ provides:
   type: connect-conn
   properties:
   - listen_port
+  - group_id
 
 properties:
   listen_port:

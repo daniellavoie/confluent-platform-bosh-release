@@ -4,7 +4,7 @@ set -e
 
 source /var/vcap/packages/openjdk-8/bosh/runtime.env
 
-export CONTROL_CENTER_OPTS="-Djava.io.tmpdir=/var/vcap/data/tmp"
+export CONTROL_CENTER_OPTS="-Djava.io.tmpdir=/var/vcap/data/tmp -Djavax.net.ssl.trustStore=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks -Djavax.net.ssl.trustStorePassword=<%= p("keystore_password") %> -Djavax.net.ssl.keyStore=/var/vcap/jobs/confluent-control-center/config/generated.keystore.jks -Djavax.net.ssl.keyStorePassword=<%= p("keystore_password") %>"
 export CONTROL_CENTER_LOG4J_OPTS="-Dlog4j.configuration=file:/var/vcap/jobs/confluent-control-center/config/log4j.properties"
 
 case $1 in
