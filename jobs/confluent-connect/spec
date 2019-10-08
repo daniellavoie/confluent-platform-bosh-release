@@ -3,16 +3,21 @@ name: confluent-connect
 
 templates:
   bin/ctl: bin/ctl
+  bin/download-connectors.sh: bin/download-connectors.sh
   bin/pre-start.erb: bin/pre-start
   config/bpm.yml: config/bpm.yml
   config/ca_certs.pem.erb: config/ca_certs.pem
   config/cert.pem.erb: config/cert.pem
+  config/connect-jaas.conf: config/connect-jaas.conf
+  config/connect-login.conf.erb: config/connect-login.conf
   config/connect.properties.erb: config/connect.properties
   config/key.pem.erb: config/key.pem
+  config/log4j.properties: config/log4j.properties
 
 packages:
 - openjdk-8
 - confluent-platform
+- minio-mc
 
 consumes:
 - name: confluent-server
@@ -29,8 +34,8 @@ provides:
 
 properties:
   listen_port:
-    description: The port to listen for client connections
-    default: 8083
+    description: "Https port for Confluent Connect REST endpoints"
+    default: 8443
   group_id:
     description: Unique identifier for the set of workers that form the Kafka Connect cluster
     default: connect-cluster
@@ -66,8 +71,34 @@ properties:
     description: "Keystore password"
     default: notasecret
 
-  jaas.username:
-    description: "Username used in JAAS configuration"
+  kafka.jaas.username:
+    description: "Username used for Kafka Broker"
 
-  jaas.password:
-    description: "Password used in JAAS configuration"
+  kafka.jaas.password:
+    description: "Password used for Kafka Broker"
+
+  basic.jaas.username:
+    description: "Username used for Basic Auth"
+
+  basic.jaas.password:
+    description: "Password used for Basic Auth"
+
+  schema_registry.basic.username:
+    description: Username for Basic Auth on Schema Registry
+
+  schema_registry.basic.password:
+    description: Password for Basic Auth on Schema Registry
+  
+  connectors.s3.endpoint:
+    description: "S3 endpoint to lookup for connectors"
+  
+  connectors.s3.access_key:
+    description: "S3 Access key to lookup for connectors"
+    default: ""
+  
+  connectors.s3.secret_key:
+    description: "S3 Secret key to lookup for connectors"
+    default: ""
+  
+  connectors.s3.bucket:
+    description: "Bucket to lookup for connectors"

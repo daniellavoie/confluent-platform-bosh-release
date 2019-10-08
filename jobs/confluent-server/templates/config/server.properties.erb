@@ -40,8 +40,8 @@ sasl.enabled.mechanisms=SCRAM-SHA-512
 sasl.mechanism=SCRAM-SHA-512
 sasl.mechanism.inter.broker.protocol=SCRAM-SHA-512
 sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
-username="<%= p("jaas.username") %>" \
-password="<%= p("jaas.password") %>";
+  username="<%= p("jaas.username") %>" \
+  password="<%= p("jaas.password") %>";
 
 ssl.keystore.location=/var/vcap/jobs/confluent-server/config/generated.keystore.jks
 ssl.keystore.password=<%= p("keystore_password") %>
@@ -179,4 +179,7 @@ confluent.metrics.reporter.ssl.keystore.location=/var/vcap/jobs/confluent-server
 confluent.metrics.reporter.ssl.keystore.password=<%= p("keystore_password") %>
 confluent.metrics.reporter.ssl.keystore.type=PKCS12
 
+confluent.metrics.reporter.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+  username="<%= p("metric.jaas.username") %>" \
+  password="<%= p("metric.jaas.password") %>";
 <% end %>

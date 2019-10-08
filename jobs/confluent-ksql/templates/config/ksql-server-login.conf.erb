@@ -1,0 +1,9 @@
+
+<%  p("users").each_value do |user|
+      if user["roles"] != nil
+        roles = user["roles"].map { |role| "#{role}" }.join(",")
+        if roles != ""
+          roles = "," + roles
+        end
+      end %><%=   user["username"] %>: <%= user["password"] %><%= roles %>
+<%  end %>

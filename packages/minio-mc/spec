@@ -1,0 +1,5 @@
+---
+name: minio-mc
+dependencies: []
+files:
+- minio/mc

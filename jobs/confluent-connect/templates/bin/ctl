@@ -4,6 +4,14 @@ set -e
 
 source /var/vcap/packages/openjdk-8/bosh/runtime.env
 
+export KAFKA_OPTS="-Djava.security.auth.login.config=/var/vcap/jobs/confluent-connect/config/connect-jaas.conf -Dssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks -Dssl.truststore.password=<%= p("keystore_password") %> -Dssl.keystore.location=/var/vcap/jobs/confluent-connect/config/generated.keystore.jks -Dssl.keystore.password=<%= p("keystore_password") %> -Dssl.key.password=<%= p("keystore_password") %>"
+
+#export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/var/vcap/jobs/confluent-connect/config/log4j.properties"
+
+export SCHEMA_REGISTRY_OPTS="-Dssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks -Dssl.truststore.password=<%= p("keystore_password") %> -Dssl.keystore.location=/var/vcap/jobs/confluent-connect/config/generated.keystore.jks -Dssl.keystore.password=<%= p("keystore_password") %> -Dssl.key.password=<%= p("keystore_password") %>"
+
+export LOG_DIR=/var/vcap/sys/log/confluent-connect
+
 case $1 in
 
   start)

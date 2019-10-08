@@ -11,8 +11,8 @@ security.protocol=SASL_SSL
 
 sasl.mechanism=SCRAM-SHA-512
 sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
-username="<%= p("jaas.username") %>" \
-password="<%= p("jaas.password") %>";
+username="<%= p("kafka.jaas.username") %>" \
+password="<%= p("kafka.jaas.password") %>";
 
 ssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks
 ssl.truststore.password=<%= p("keystore_password") %>
@@ -27,11 +27,15 @@ group.id=<%= p("group_id") %>
 # The converters specify the format of data in Kafka and how to translate it into Connect data.
 # Every Connect user will need to configure these based on the format they want their data in
 # when loaded from or stored into Kafka
-<% schema_registry_url = "http://" + schemaRegistries.address + ":" + schemaRegistries.p("listen_port").to_s %>
+<% schema_registry_url = schemaRegistries.instances.map { |instance| "https://#{instance.address}:#{schemaRegistries.p('listen_port')}" }.join(",") %>
 key.converter=io.confluent.connect.avro.AvroConverter
 key.converter.schema.registry.url=<%= schema_registry_url %>
+key.converter.schema.registry.basic.auth.credentials.source=USER_INFO
+key.converter.schema.registry.basic.auth.user.info=<%= p("schema_registry.basic.username") %>:<%= p("schema_registry.basic.password") %>
 value.converter=io.confluent.connect.avro.AvroConverter
 value.converter.schema.registry.url=<%= schema_registry_url %>
+value.converter.schema.registry.basic.auth.credentials.source=USER_INFO
+value.converter.schema.registry.basic.auth.user.info=<%= p("schema_registry.basic.username") %>:<%= p("schema_registry.basic.password") %>
 
 # Internal Storage Topics.
 #
@@ -78,16 +82,15 @@ internal.value.converter.schemas.enable=false
 # producer.interceptor.classes=io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
 # consumer.interceptor.classes=io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
 
-# These are provided to inform the user about the presence of the REST host and port configs
-# Hostname & Port for the REST API to listen on. If this is set, it will bind to the interface used to listen to requests.
-#rest.host.name=0.0.0.0
-#rest.port=<%= p("listen_port") %>
-listeners=https://<%= spec.address %>:8443
+listeners=https://<%= spec.address %>:<%= p("listen_port") %>
 listeners.https.ssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks
 listeners.https.ssl.truststore.password=<%= p("keystore_password") %>
 listeners.https.ssl.keystore.location=/var/vcap/jobs/confluent-connect/config/generated.keystore.jks
 listeners.https.ssl.keystore.password=<%= p("keystore_password") %>
 listeners.https.ssl.key.password=<%= p("keystore_password") %>
+
+rest.extension.classes=org.apache.kafka.connect.rest.basic.auth.extension.BasicAuthSecurityRestExtension
+
 
 # The Hostname & Port that will be given out to other workers to connect to i.e. URLs that are routable from other servers.
 #rest.advertised.host.name=0.0.0.0

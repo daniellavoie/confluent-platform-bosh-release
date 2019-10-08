@@ -8,6 +8,8 @@ templates:
   config/ca_certs.pem.erb: config/ca_certs.pem
   config/cert.pem.erb: config/cert.pem
   config/key.pem.erb: config/key.pem
+  config/schema-registry-jaas.conf: config/schema-registry-jaas.conf
+  config/schema-registry-login.conf.erb: config/schema-registry-login.conf
   config/schema-registry.properties.erb: config/schema-registry.properties
 
 consumes:
@@ -50,8 +52,18 @@ properties:
     description: "Keystore password"
     default: notasecret
 
-  jaas.username:
-    description: "Username used in JAAS configuration"
+  kafka.jaas.username:
+    description: "Username used for Kafka Broker"
 
-  jaas.password:
-    description: "Password used in JAAS configuration"
+  kafka.jaas.password:
+    description: "Password used for Kafka Broker"
+
+  users:
+    description: |-
+      List of Schema Registry users
+      admin:
+        username: admin
+        password: password
+      user:
+        username: user
+        password: password

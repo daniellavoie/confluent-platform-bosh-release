@@ -4,6 +4,8 @@ set -e
 
 source /var/vcap/packages/openjdk-8/bosh/runtime.env
 
+#export SCHEMA_REGISTRY_OPTS="-Djava.security.auth.login.config=/var/vcap/jobs/confluent-schema-registry/config/schema-registry-jaas.conf"
+
 case $1 in
 
   start)

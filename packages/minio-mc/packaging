@@ -1,0 +1,5 @@
+set -ex
+
+chmod +x ${BOSH_COMPILE_TARGET}/minio/mc
+
+mv ${BOSH_COMPILE_TARGET}/minio/mc ${BOSH_INSTALL_TARGET}

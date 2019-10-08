@@ -8,6 +8,8 @@ templates:
   config/ca_certs.pem.erb: config/ca_certs.pem
   config/cert.pem.erb: config/cert.pem
   config/key.pem.erb: config/key.pem
+  config/ksql-server-jaas.conf: config/ksql-server-jaas.conf
+  config/ksql-server-login.conf.erb: config/ksql-server-login.conf
   config/ksql-server.properties.erb: config/ksql-server.properties
 
 packages:
@@ -25,11 +27,20 @@ provides:
   type: ksql-conn
   properties:
   - listen_port
+  - external_hostname
+  - cluster_name
 
 properties:
   listen_port:
     description: The port the server listens on.
     default: 8088
+
+  external_hostname:
+    description: Hostname used by KSQL clients
+
+  cluster_name:
+    description: KSQL cluster name
+    default: KSQL
 
   tls.ca_certs:
     description: |
@@ -44,8 +55,18 @@ properties:
     description: "Keystore password"
     default: notasecret
 
-  jaas.username:
-    description: "Username used in JAAS configuration"
+  kafka.jaas.username:
+    description: "Username used for Kafka Broker"
 
-  jaas.password:
-    description: "Password used in JAAS configuration"
+  kafka.jaas.password:
+    description: "Password used for Kafka Broker"
+
+  users:
+    description: |-
+      List of KSQL users
+      admin:
+        username: admin
+        password: password
+      user:
+        username: user
+        password: password
