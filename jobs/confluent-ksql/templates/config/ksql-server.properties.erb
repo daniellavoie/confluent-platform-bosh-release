@@ -15,21 +15,26 @@
 # specific language governing permissions and limitations under the License.
 #
 
+authentication.method=BASIC
+authentication.roles=admin,developer,user,ksq-user
+authentication.realm=KsqlServer
+
 #------ Endpoint config -------
 
 ### HTTP  ###
 # The URL the KSQL server will listen on:
-listeners=http://<%= spec.address %>:<%= p("listen_port") %>
+listeners=https://0.0.0.0:<%= p("listen_port") %>
 
 ### HTTPS ###
 # To switch KSQL over to communicating using HTTPS comment out the 'listeners' line above
 # uncomment and complete the properties below.
 # See: https://docs.confluent.io/current/ksql/docs/installation/server-config/security.html#configuring-ksql-cli-for-https
 #
-# listeners=https://localhost:8088
-# ssl.keystore.location=?
-# ssl.keystore.password=?
-# ssl.key.password=?
+ssl.truststore.location=/var/vcap/jobs/confluent-ksql/config/generated.truststore.jks
+ssl.truststore.password=<%= p("keystore_password") %>
+ssl.keystore.location=/var/vcap/jobs/confluent-ksql/config/generated.keystore.jks
+ssl.keystore.password=<%= p("keystore_password") %>
+ssl.key.password=<%= p("keystore_password") %>
 
 #------ Logging config -------
 
@@ -54,8 +59,8 @@ security.protocol=SASL_SSL
 
 sasl.mechanism=SCRAM-SHA-512
 sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
-  username="<%= p("jaas.username") %>" \
-  password="<%= p("jaas.password") %>";
+  username="<%= p("kafka.jaas.username") %>" \
+  password="<%= p("kafka.jaas.password") %>";
 
 ssl.truststore.location=/var/vcap/jobs/confluent-ksql/config/generated.truststore.jks
 ssl.truststore.password=<%= p("keystore_password") %>
@@ -64,5 +69,5 @@ ssl.keystore.password=<%= p("keystore_password") %>
 ssl.key.password=<%= p("keystore_password") %>
 
 # Uncomment and complete the following to enable KSQL's integration to the Confluent Schema Registry:
-<% schema_registry_url = "http://" + schemaRegistries.address + ":" + schemaRegistries.p("listen_port").to_s %>
+<% schema_registry_url = "https://" + schemaRegistries.address + ":" + schemaRegistries.p("listen_port").to_s %>
 ksql.schema.registry.url=<%= schema_registry_url %>

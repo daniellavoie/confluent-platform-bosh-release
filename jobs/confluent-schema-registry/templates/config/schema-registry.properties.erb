@@ -15,12 +15,24 @@
 # limitations under the License.
 #
 
+authentication.method=BASIC
+authentication.roles=admin,app
+authentication.realm=SchemaRegistry
+
 # The address the socket server listens on.
 #   FORMAT:
 #     listeners = listener_name://host_name:port
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
-listeners=http://<%= spec.address %>:<%= p("listen_port") %>
+listeners=https://<%= spec.address %>:<%= p("listen_port") %>
+
+inter.instance.protocol=https
+
+ssl.truststore.location=/var/vcap/jobs/confluent-schema-registry/config/generated.truststore.jks
+ssl.truststore.password=<%= p("keystore_password") %>
+ssl.keystore.location=/var/vcap/jobs/confluent-schema-registry/config/generated.keystore.jks
+ssl.keystore.password=<%= p("keystore_password") %>
+ssl.key.password=<%= p("keystore_password") %>
 
 # Zookeeper connection string for the Zookeeper cluster used by your Kafka cluster
 # (see zookeeper docs for details).
@@ -41,8 +53,8 @@ kafkastore.security.protocol=SASL_SSL
 kafkastore.sasl.mechanism=SCRAM-SHA-512
 
 kafkastore.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
-  username="<%= p("jaas.username") %>" \
-  password="<%= p("jaas.password") %>";
+  username="<%= p("kafka.jaas.username") %>" \
+  password="<%= p("kafka.jaas.password") %>";
 
 kafkastore.ssl.truststore.location=/var/vcap/jobs/confluent-schema-registry/config/generated.truststore.jks
 kafkastore.ssl.truststore.password=<%= p("keystore_password") %>

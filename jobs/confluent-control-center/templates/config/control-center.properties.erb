@@ -1,61 +1,63 @@
-# host/port pairs to use for establishing the initial connection to the Kafka cluster
-<% servers = link('confluent-server') %>
-<% zks = link('confluent-zookeeper') %>
-<% connect = link('confluent-connect') %>
-<% ksql = link('confluent-ksql') %>
-<% registry = link('confluent-schema-registry') %>
-
-confluent.controlcenter.rest.listeners=https://0.0.0.0:<%= p("listen_port") %>
-confluent.controlcenter.rest.ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.keystore.jks
-confluent.controlcenter.rest.ssl.keystore.password=<%= p("keystore_password") %>
-confluent.controlcenter.rest.ssl.key.password=<%= p("keystore_password") %>
-confluent.controlcenter.rest.ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
-confluent.controlcenter.rest.ssl.truststore.password=<%= p("keystore_password") %>
+<% servers = link('confluent-server') 
+   zks = link('confluent-zookeeper') 
+   connect = link('confluent-connect')
+   ksql = link('confluent-ksql')
+   registry = link('confluent-schema-registry')
+   replication = servers.instances.size > 2 ? 3 : 1 %>
 
 bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
 
-# location for Control Center data
+confluent.controlcenter.auth.restricted.roles=Restricted
+confluent.controlcenter.command.topic.replication=<%= replication %>
+confluent.controlcenter.connect.<%= connect.p('group_id') %>.cluster=<%= connect.instances.map { |instance| "https://#{instance.address}:#{connect.p('listen_port')}" }.join(",") %>
 confluent.controlcenter.data.dir=/var/vcap/store/confluent-control-center
+confluent.controlcenter.internal.topics.replication=<%= replication %>
 
-# the Confluent license
-<% if !p("confluent.license", nil).nil? %>
-confluent.license=<%= p("confluent.license") %>
-<% end %>
+confluent.controlcenter.ksql.url=<%= ksql.instances.map { |instance| "https://#{instance.address}:#{ksql.p('listen_port')}" }.join(",") %>
+confluent.controlcenter.ksql.advertised.url=https://<%= p("basic.jaas.username") %>:<%= p("basic.jaas.password") %><%= ksql.p("external_hostname") %>
 
-sasl.mechanism.inter.broker.protocol=SSL
-ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
-ssl.keystore.password=<%= p("keystore_password") %>
-ssl.key.password=<%= p("keystore_password") %>
-ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
-ssl.truststore.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.authentication.method=BASIC
+confluent.controlcenter.rest.authentication.realm=c3
+confluent.controlcenter.rest.authentication.roles=Administrators,Restricted
+confluent.controlcenter.rest.listeners=https://0.0.0.0:<%= p("listen_port") %>
+confluent.controlcenter.rest.ssl.key.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.keystore.jks
+confluent.controlcenter.rest.ssl.keystore.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+confluent.controlcenter.rest.ssl.truststore.password=<%= p("keystore_password") %>
+
+confluent.controlcenter.schema.registry.url=<%= registry.instances.map { |instance| "https://#{instance.address}:#{registry.p('listen_port')}" }.join(",") %>
+confluent.controlcenter.schema.registry.basic.auth.credentials.source=USER_INFO
+confluent.controlcenter.schema.registry.basic.auth.user.info=<%= p("basic.jaas.username") %>:<%= p("basic.jaas.password") %>
 
 confluent.controlcenter.streams.security.protocol=SASL_SSL
 confluent.controlcenter.streams.sasl.mechanism=SCRAM-SHA-512
-confluent.controlcenter.streams.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="<%= p("jaas.username") %>" password="<%= p("jaas.password") %>";
+confluent.controlcenter.streams.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+  username="<%= p("kafka.jaas.username") %>" \
+  password="<%= p("kafka.jaas.password") %>";
 confluent.controlcenter.streams.ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
 confluent.controlcenter.streams.ssl.truststore.password=<%= p("keystore_password") %>
 confluent.controlcenter.streams.ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.keystore.jks
 confluent.controlcenter.streams.ssl.keystore.password=<%= p("keystore_password") %>
 confluent.controlcenter.streams.ssl.key.password=<%= p("keystore_password") %>
 
+# the Confluent license
+<% if !p("confluent.license", nil).nil? %>
+confluent.license=<%= p("confluent.license") %>
+<% end %>
+
+confluent.metrics.topic.replication=<%= replication %>
+
+confluent.monitoring.interceptor.topic.replication=<%= replication %>
+
+sasl.mechanism.inter.broker.protocol=SSL
+
+ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+ssl.keystore.password=<%= p("keystore_password") %>
+ssl.key.password=<%= p("keystore_password") %>
+ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+ssl.truststore.password=<%= p("keystore_password") %>
+
 # ZooKeeper connection string with host and port of a ZooKeeper servers
 <% zk_port = zks.p('client_port') %>
 zookeeper.connect=<%= zks.instances.map { |instance| "#{instance.address}:#{zk_port}" }.join(",") %>
-
-<% replication = servers.instances.size > 2 ? 3 : 1 %>
-confluent.metrics.topic.replication=<%= replication %>
-confluent.monitoring.interceptor.topic.replication=<%= replication %>
-confluent.controlcenter.command.topic.replication=<%= replication %>
-confluent.controlcenter.internal.topics.replication=<%= replication %>
-
-# A comma separated list of Connect host names
-<% connect_listen_port = connect.p('listen_port') %>
-confluent.controlcenter.connect.<%= connect.p('group_id') %>.cluster=<%= connect.instances.map { |instance| "https://#{instance.address}:8443" }.join(",") %>
-
-# KSQL cluster URL
-<% ksql_listen_port = ksql.p('listen_port') %>
-confluent.controlcenter.ksql.url=<%= ksql.instances.map { |instance| "http://#{instance.address}:#{ksql_listen_port}" }.join(",") %>
-
-# Schema Registry cluster URL
-<% registry_listen_port = registry.p('listen_port') %>
-confluent.controlcenter.schema.registry.url=<%= registry.instances.map { |instance| "http://#{instance.address}:#{registry_listen_port}" }.join(",") %>

@@ -19,7 +19,7 @@ Long story short, Bosh let you declare a desired state of your software and the 
 ## TL;DR - I just want to deploy
 
 * [AWS deployment instructions](doc/aws-instructions.md)
-* GCP Deployment instructions - sooooon
+* [GCP Deployment instructions](gcp-instructions.md)
 * vSphere Deployment instructions - sooooon
 * Virtual Box deployment instructions - sooooon
 
@@ -36,12 +36,6 @@ A lot of security features are to be implemented. For a complete state of the bi
 ## Tested IaaS
 
 This current iteration was successully tested on AWS and GCP cpis.
-
-## Deploy single collocated VM
-
-```plain
-bosh deploy confluent-platform-bosh-release/manifests/confluent-platform-solo.yml -o confluent-platform-bosh-release/manifests/operators/create.yml
-```
 
 ## Deploy Confluent Platform Cluster
 

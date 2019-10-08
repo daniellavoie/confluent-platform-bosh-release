@@ -4,6 +4,8 @@ set -e
 
 source /var/vcap/packages/openjdk-8/bosh/runtime.env
 
+export KSQL_OPTS="-Djava.security.auth.login.config=/var/vcap/jobs/confluent-ksql/config/ksql-server-jaas.conf"
+
 case $1 in
 
   start)

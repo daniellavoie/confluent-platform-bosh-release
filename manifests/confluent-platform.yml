@@ -24,22 +24,42 @@ variables:
   options:
     ca: ca
     common_name: "*.((confluent-connect-external-host))"
+- name: confluent-schema-registry-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-schema-registry-external-host))"
 - name: confluent-control-center-tls
   type: certificate
   options:
     ca: ca
     common_name: "*.((confluent-control-center-external-host))"
+- name: confluent-ksql-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-ksql-external-host))"
 - name: server-jaas-password
   type: password
 - name: metric-jaas-password
   type: password
-- name: connect-jaas-password
+- name: connect-kafka-jaas-password
   type: password
-- name: control-center-jaas-password
+- name: control-center-kafka-jaas-password
   type: password
-- name: ksql-jaas-password
+- name: basic-jaas-password
+  type: password
+- name: schema-registry-users-connect-password
+  type: password
+- name: schema-registry-users-ksql-password
+  type: password
+- name: schema-registry-users-app-password
+  type: password
+- name: ksql-kafka-jaas-password
   type: password
 - name: schema-registry-jaas-password
+  type: password
+- name: ksql-users-developer-password
   type: password
 
 instance_groups:
@@ -65,13 +85,13 @@ instance_groups:
             password: ((metric-jaas-password))
           connect:
             username: connect
-            password: ((connect-jaas-password))
+            password: ((connect-kafka-jaas-password))
           control-center:
             username: control-center
-            password: ((control-center-jaas-password))
+            password: ((control-center-kafka-jaas-password))
           ksql:
             username: ksql
-            password: ((ksql-jaas-password))
+            password: ((ksql-kafka-jaas-password))
           schema-registry:
             username: schema-registry
             password: ((schema-registry-jaas-password))
@@ -80,7 +100,7 @@ instance_groups:
   instances: 3
   vm_type: default
   stemcell: default
-  persistent_disk: 10240
+  persistent_disk: 200_000
   networks:
   - name: default
   jobs:
@@ -118,9 +138,14 @@ instance_groups:
         - ((ca.certificate))
         certificate: ((confluent-control-center-tls))
       keystore_password: ((keystore-password))
-      jaas:
-        username: control-center
-        password: ((control-center-jaas-password))
+      kafka:
+        jaas:
+          username: control-center
+          password: ((control-center-kafka-jaas-password))
+      basic:
+        jaas:
+          username: admin
+          password: ((basic-jaas-password))
 - name: confluent-schema-registry
   azs: [z1, z2, z3]
   instances: 1
@@ -133,14 +158,40 @@ instance_groups:
   - name: confluent-schema-registry
     release: confluent-platform
     properties:
+      debug: true
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-schema-registry-tls))
       keystore_password: ((keystore-password))
-      jaas:
-        username: schema-registry
-        password: ((schema-registry-jaas-password))
+      kafka:
+        jaas:
+          username: schema-registry
+          password: ((schema-registry-jaas-password))
+      users:
+        admin:
+          username: admin
+          password: ((basic-jaas-password))
+          roles:
+          - admin
+          - app
+        connect:
+          username: connect
+          password: ((schema-registry-users-connect-password))
+          roles:
+          - admin
+          - app
+        ksql:
+          username: ksql
+          password: ((schema-registry-users-ksql-password))
+          roles:
+          - admin
+          - app
+        app:
+          username: user
+          password: ((schema-registry-users-app-password))
+          roles:
+          - app
 - name: confluent-connect
   azs: [z1, z2, z3]
   instances: 1
@@ -158,29 +209,63 @@ instance_groups:
         - ((ca.certificate))
         certificate: ((confluent-connect-tls))
       keystore_password: ((keystore-password))
-      jaas:
-        username: connect
-        password: ((connect-jaas-password))
+      basic:
+        jaas:
+          username: admin
+          password: ((basic-jaas-password))
+      kafka:
+        jaas:
+          username: connect
+          password: ((connect-kafka-jaas-password))
+      schema_registry:
+        basic:
+          username: connect
+          password: ((schema-registry-users-connect-password))
+      connectors:
+        s3:
+          endpoint: ((connectors-s3-endpoint))
+          access_key: ((connectors-s3-access-key))
+          secret_key: ((connectors-s3-secret-key))
+          bucket: ((connectors-s3-bucket))
 - name: confluent-ksql
   azs: [z1, z2, z3]
   instances: 1
   vm_type: default
   stemcell: default
   persistent_disk: 10240
+  vm_extensions:
+  - ksql
   networks:
   - name: default
   jobs:
   - name: confluent-ksql
     release: confluent-platform
     properties:
+      external_hostname: ((ksql-external-hostname))
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-ksql-tls))
       keystore_password: ((keystore-password))
-      jaas:
-        username: ksql
-        password: ((ksql-jaas-password))
+      kafka:
+        jaas:
+          username: ksql
+          password: ((ksql-kafka-jaas-password))
+      users:
+        admin:
+          username: admin
+          password: ((basic-jaas-password))
+          roles:
+          - admin
+          - developer
+          - user
+          - ksq-user
+        developer:
+          username: developer
+          password: ((ksql-users-developer-password))
+          roles:
+          - developer
+          - user
 
 stemcells:
 - alias: default

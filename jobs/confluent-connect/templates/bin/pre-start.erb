@@ -4,6 +4,8 @@ set -eux
 set -o pipefail
 
 source /var/vcap/packages/openjdk-8/bosh/runtime.env
+source /var/vcap/jobs/confluent-connect/bin/download-connectors.sh
+
 export PATH=$PATH:/var/vcap/packages/confluent-platform/bin:$PATH
 
 CONFIG_DIR=/var/vcap/jobs/confluent-connect/config
@@ -48,3 +50,18 @@ $KEY_TOOL -importkeystore \
   -srckeypass $KEYSTORE_PASSWORD \
   -alias localhost
 <% end %>
+
+CONNECTORS_FOLDER=/var/vcap/packages/confluent-platform/share/java/custom-connectors
+
+if [ ! -d "$CONNECTORS_FOLDER" ]; then
+  mkdir -p $CONNECTORS_FOLDER
+fi
+
+if [ -z "$(ls -A $CONNECTORS_FOLDER)" ]; then
+  downloadConnectors \
+    $CONNECTORS_FOLDER \
+    <%= p("connectors.s3.endpoint") %> \
+    <%= p("connectors.s3.access_key") %> \
+    <%= p("connectors.s3.secret_key") %> \
+    <%= p("connectors.s3.bucket") %>
+fi

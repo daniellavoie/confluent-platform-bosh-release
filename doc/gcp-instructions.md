@@ -10,17 +10,10 @@ Example CIDR : 10.0.10.0/16
 
 ### Create subnets
 
-#### Infrastructure
-
-* Example subnet 1 name : infrastructure
-* Example subnet 1 CIDR : 10.0.10.0/24
-* Example subnet 1 region : northamerica-northeast1
-
-#### Confluent Platform
-
-* Example subnet 2 name : confluent-platform
-* Example subnet 2 CIDR : 10.0.20.0/24
-* Example subnet 2 region : northamerica-northeast1
+| Name | CIDR | Region |
+|---|---|---|
+| instrastructure | 10.0.10.0/24 | northamerica-northeast1 |
+| confluent-platform | 10.0.20.0/24 | northamerica-northeast1 |
 
 ### Create Firewall rules
 
@@ -28,44 +21,63 @@ Example CIDR : 10.0.10.0/16
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | bosh-allow-ssh | allow-ssh | IP ranges: 0.0.0.0/0  | tcp:22 | cp-bosh |
 | bosh-unrestricted | confluent-platform | Tags: confluent-platform  | all | cp-bosh |
-|  bosh-allow-control-center | allow-control-center | IP ranges: 0.0.0.0/0 | tcp:9021 | cp-bosh |
-
-### Create a TCP Load Balancer for Confluent Server
-
-TODO
+| bosh-allow-control-center | allow-control-center | IP ranges: 0.0.0.0/0 | tcp:9021 | cp-bosh |
+| bosh-allow-ksql | allow-ksql | IP ranges: 0.0.0.0/0 | tcp:8088 | cp-bosh |
 
 ### Create unmanaged instance groups for Control Center
 
-Instance Group 1 Name : cp-control-center
-Instance Group 1 Zone : northamerica-northeast1-a
-Instance Group 1 Network : cp-bosh
-Instance Group 1 Subnet : confluent-platform
+| Number | Zone | Name | Network | Subnet |
+|---|---|---|---|---|
+| 1 | northamerica-northeast1-a | cp-control-center | cp-bosh | confluent-platform |
+| 2 | northamerica-northeast1-b | cp-control-center | cp-bosh | confluent-platform |
+| 3 | northamerica-northeast1-c | cp-control-center | cp-bosh | confluent-platform |
 
+### Create unmanaged instance groups for KSQL
 
-Instance Group 2 Name : cp-control-center
-Instance Group 2 Zone : northamerica-northeast1-b
-Instance Group 2 Network : cp-bosh
-Instance Group 2 Subnet : confluent-platform
-
-
-Instance Group 3 Name : cp-control-center
-Instance Group 3 Zone : northamerica-northeast1-c
-Instance Group 3 Network : cp-bosh
-Instance Group 3 Subnet : confluent-platform
+| Number | Zone | Name | Network | Subnet |
+|---|---|---|---|---|
+| 1 | northamerica-northeast1-a | cp-ksql | cp-bosh | confluent-platform |
+| 2 | northamerica-northeast1-b | cp-ksql | cp-bosh | confluent-platform |
+| 3 | northamerica-northeast1-c | cp-ksql | cp-bosh | confluent-platform |
 
 ### Create an Http Load Balancer for Control Center
 
 #### Backend services
 
 Instance Group : cp-control-center
+
 Port number : 9021
+
 Health check : HTTP on :9021/
+
 Backend Services : cp-control-center
 
 #### Frontend
 
 protocol :  http
+
 port : 80
+
+ip : Reserved ipv4
+
+### Create an Http Load Balancer for KSQL
+
+#### Backend services
+
+Instance Group : cp-ksql
+
+Port number : 8088
+
+Health check : HTTP on :8088/
+
+Backend Services : cp-ksql
+
+#### Frontend
+
+protocol :  https
+
+port : 443
+
 ip : Reserved ipv4
 
 ### Create a jumpbox to run Bosh CLI Commands

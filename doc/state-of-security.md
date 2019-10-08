@@ -1,91 +1,44 @@
 # State of security implementation
 
-- [ ] Broker
-  - [X] Brokers to brokers
-    - [X] Encryption
-    - [X] Authentication
-  - [ ] Metric reporter
-    - [X] Encryption
-    - [X] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-
-- [ ] Connect
-  - [ ] Workers to Brokers
-    - [X] Encryption
-    - [X] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] Rest API
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] RBAC
-  - [ ] Interceptors
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-
-- [ ] KSQL
-  - [ ] KSQL nodes to Brokers
-    - [X] Encryption
-    - [X] Authentication
-    - [ ] ACL
-  - [ ] Rest API
-    - [ ] Encryption
-    - [ ] Authentication
+- [X] Encryption
+  - [X] Kafka Broker
+    - [X] mTLS for broker intercommunication
+    - [X] mTLS between Metric Reporters and Kafka Cluster
+  - [X] Kafka Connect  
+    - [X] mTLS with Kafka cluster
+    - [X] Https for Connect REST endpoints
+  - [X] Schema Registry
+    - [X] mTLS with Kafka cluster
+    - [X] Https for REST endpoints
+  - [X] KSQL
+    - [X] mTLS with Kafka cluster
+    - [X] Https for REST endpoints
+  - [X] Control Center
+    - [X] mTLS with Kafka cluster
+    - [X] Https for REST endpoints
+- [ ] Authentication
+  - [ ] Kafka Broker
+    - [X] SASL for broker intercommunication
+    - [X] SASL between Metric Reporters and Kafka Cluster (to test)
+  - [X] Kafka Connect
+    - [X] SASL with Kafka cluster
+    - [X] REST endpoints
   - [ ] Schema Registry
-    - [ ] Encryption
-    - [ ] Authentication
-  - [ ] Interceptors
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] ACL
-
-- [ ] Schema Registry
-  - [ ] Schema registry to Brokers
-    - [X] Encryption
-    - [X] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] Rest API
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] RBAC
-  - [ ] Interceptors
-    - [ ] SSL
-    - [ ] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-
-- [ ] Control Center
-  - [ ] Rest API
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] Brokers
-    - [X] Encryption
-    - [X] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] Connect
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] KSQL
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] Schema Registry
-    - [ ] Encryption
-    - [ ] Authentication
-    - [ ] ACL
-    - [ ] RBAC
-  - [ ] Zookeeper
-    - [ ] Authentication
-
-- [ ] Zookeeper
-  - [ ] Authentication
+    - [X] SASL with Kafka cluster
+    - [ ] REST endpoints
+  - [X] KSQL
+    - [X] SASL for with Kafka cluster
+    - [X] REST endpoints
+  - [X] Control Center
+    - [X] SASL with Kafka cluster
+    - [X] Basic Auth for REST endpoints
+- [ ] Kafka Topics ACL
+  - [ ] Kafka Connect
+  - [ ] Schema Regisry
+  - [ ] KSQL
+  - [ ] Control Center
+- [ ] RBAC
+  - [ ] Kafka Connect
+  - [ ] Schema Regisry
+  - [ ] KSQL
+  - [ ] Control Center
