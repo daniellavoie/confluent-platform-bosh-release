@@ -6,7 +6,7 @@ This is a BOSH release and deployment manifest deploy the Confluent Platform on 
 
 Containers are fun, but getting stateful workloads in them can get a bit arkward. The abstraction layers it brins only add more complexity to the primitives they require only in the name of cloud independance.
 
-What if a cloud agnostic resource orchestrator existed and that was closer to the underlying cloud native resources. Enters [Bosh](https://bosh.io). As stated by the project presentation : 
+What if a cloud agnostic resource orchestrator existed and that was closer to the underlying cloud native resources. Enters [BOSH](https://bosh.io). As stated by the project presentation:
 
 > BOSH is a project that unifies release engineering, deployment, and lifecycle management of small and large-scale cloud software. BOSH can provision and deploy software over hundreds of VMs. It also performs monitoring, failure recovery, and software updates with zero-to-minimal downtime.
 
@@ -14,7 +14,7 @@ Long story short, Bosh let you declare a desired state of your software and the 
 
 ## Getting started on Bosh
 
-[Stark and Wayne](https://starkandwayne.com) provides an incredible [Bosh tutorial](http://ultimateguidetobosh.com/). That is a recommeded first step to enter the world of Bosh.
+[Stark & Wayne](https://starkandwayne.com) provides an incredible [BOSH tutorial](http://ultimateguidetobosh.com/). That is a recommeded first step to enter the world of Bosh.
 
 ## TL;DR - I just want to deploy
 
@@ -39,8 +39,9 @@ This current iteration was successully tested on AWS and GCP cpis.
 
 ## Deploy Confluent Platform Cluster
 
-```
-bosh deploy confluent-platform-bosh-release/manifests/confluent-platform.yml -o confluent-platform-bosh-release/manifests/operators/create.yml
+```plain
+bosh deploy confluent-platform-bosh-release/manifests/confluent-platform.yml \
+    -o confluent-platform-bosh-release/manifests/operators/create.yml
 ```
 
 ## Updates
@@ -49,11 +50,11 @@ When new versions of `confluent-platform-bosh-release` are released the `manifes
 
 ```plain
 export BOSH_ENVIRONMENT=<bosh-alias>
-export BOSH_DEPLOYMENT=confluent-platform-dev
+export BOSH_DEPLOYMENT=confluent-platform
 cd confluent-platform-bosh-release
 git pull
 cd -
-bosh deploy confluent-platform-bosh-release/manifests/confluent-platform-solo.yml
+bosh deploy confluent-platform-bosh-release/manifests/confluent-platform.yml
 ```
 
 ## Development
@@ -61,9 +62,9 @@ bosh deploy confluent-platform-bosh-release/manifests/confluent-platform-solo.ym
 To iterate on this BOSH release, use the `create.yml` manifest when you deploy:
 
 ```plain
-bosh deploy manifests/confluent-platform-solo.yml -o manifests/operators/create.yml
+bosh deploy manifests/confluent-platform.yml -o manifests/operators/create.yml
 ```
 
 ## Acknowledgement
 
-Big shout out to [Stark and Wayne](https://starkandwayne.com) for their inspiration with their [Kafka Bosh Release](https://github.com/cloudfoundry-community/kafka-boshrelease). The openjdk package used by release is provided by them.
+Big shout out to [Stark & Wayne](https://starkandwayne.com) for their inspiration with their [Kafka Bosh Release](https://github.com/cloudfoundry-community/kafka-boshrelease). The openjdk package used by release is provided by them.
