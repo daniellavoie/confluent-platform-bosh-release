@@ -1,11 +1,13 @@
-<% servers = link('confluent-server') %>
-<% schemaRegistries = link('confluent-schema-registry') %>
+<% servers = link('confluent-server') 
+   schemaRegistries = link('confluent-schema-registry') 
+   
+  replication = servers.instances.size > 1 ? (instances.size > 2 ? 3 : 2) : 1 %>
 # Sample configuration for a distributed Kafka Connect worker that uses Avro serialization and
 # integrates the the Schema Registry. This sample configuration assumes a local installation of
 # Confluent Platform with all services running on their default ports.
 
 # Bootstrap Kafka servers. If multiple servers are specified, they should be comma-separated.
-bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
+bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9092" }.join(",") %>
 
 security.protocol=SASL_SSL
 
@@ -57,9 +59,9 @@ status.storage.topic=<%= p("status.storage.topic") %>
 # only a single broker, we set the replication factor here to just 1. That's okay for the examples, but
 # ALWAYS use a replication factor of AT LEAST 3 for production environments to reduce the risk of 
 # losing connector offsets, configurations, and status.
-config.storage.replication.factor=<%= p("config.storage.replication_factor") %>
-offset.storage.replication.factor=<%= p("offset.storage.replication_factor") %>
-status.storage.replication.factor=<%= p("status.storage.replication_factor") %>
+config.storage.replication.factor=<%= replication %>
+offset.storage.replication.factor=<%= replication %>
+status.storage.replication.factor=<%= replication %>
 
 # The config storage topic must have a single partition, and this cannot be changed via properties. 
 # Offsets for all connectors and tasks are written quite frequently and therefore the offset topic

@@ -33,7 +33,7 @@ delete.topic.enable=<%= p("delete_topic") %>
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
 
-listeners=PLAINTEXT://<%= spec.address %>:9092,SASL_SSL://<%= spec.address %>:9093
+listeners=SASL_SSL://<%= spec.address %>:9092
 security.inter.broker.protocol=SASL_SSL
 
 sasl.enabled.mechanisms=SCRAM-SHA-512
@@ -58,7 +58,7 @@ ssl.truststore.type=PKCS12
 #advertised.listeners=PLAINTEXT://your.host.name:9092
 <% if_p('advertised.listener') do |advertised_listener|
   if advertised_listener[spec.index] != nil %>
-advertised.listeners=PLAINTEXT://<%= spec.address %>:9092,<%= security_protocol %>://<%= spec.address %>:9093
+advertised.listeners=PLAINTEXT://<%= spec.address %>:9092,<%= security_protocol %>://<%= spec.address %>:9092
 <%  end
 end %>
 
@@ -95,9 +95,9 @@ num.recovery.threads.per.data.dir=1
 ############################# Internal Topic Settings  #############################
 # The replication factor for the group metadata internal topics "__consumer_offsets" and "__transaction_state"
 # For anything other than development testing, a value greater than 1 is recommended for to ensure availability such as 3.
-offsets.topic.replication.factor=<%= p("offsets.topic.replication.factor") %>
-transaction.state.log.replication.factor=<%= p("transaction.state.log.replication.factor") %>
-transaction.state.log.min.isr=<%= p("transaction.state.log.min.isr") %>
+offsets.topic.replication.factor=<%= p('replication_factor') %>
+transaction.state.log.replication.factor=<%= p('replication_factor') %>
+transaction.state.log.min.isr=<%= p('min_isr') %>
 
 ############################# Log Flush Policy #############################
 
@@ -163,7 +163,7 @@ zookeeper.connection.timeout.ms=6000
 # to point to your metrics Kafka cluster.
 metric.reporters=io.confluent.metrics.reporter.ConfluentMetricsReporter
 
-confluent.metrics.reporter.bootstrap.servers=<%= p("metric.bootstrap_servers", spec.address + ":9093") %>
+confluent.metrics.reporter.bootstrap.servers=<%= p("metric.bootstrap_servers", spec.address + ":9092") %>
 confluent.metrics.reporter.topic.replicas=<%= p("metric.replicas") %>
 
 confluent.metrics.reporter.sasl.mechanism=SCRAM-SHA-512

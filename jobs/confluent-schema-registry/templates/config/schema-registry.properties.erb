@@ -1,4 +1,6 @@
-<% servers = link('confluent-server') %>
+<%  servers = link('confluent-server') 
+    
+    replication = servers.instances.size > 1 ? (instances.size > 2 ? 3 : 2) : 1 %>
 #
 # Copyright 2018 Confluent Inc.
 #
@@ -47,7 +49,7 @@ ssl.key.password=<%= p("keystore_password") %>
 # (Note that you cannot mix the two modes; use this mode only on new deployments or by shutting down
 # all instances, switching to the new configuration, and then starting the schema registry
 # instances again.)
-kafkastore.bootstrap.servers=SASL_SSL://<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
+kafkastore.bootstrap.servers=SASL_SSL://<%= servers.instances.map { |instance| "#{instance.address}:9092" }.join(",") %>
 
 kafkastore.security.protocol=SASL_SSL
 kafkastore.sasl.mechanism=SCRAM-SHA-512
@@ -66,6 +68,6 @@ kafkastore.ssl.key.password=<%= p("keystore_password") %>
 
 # The name of the topic to store schemas in
 kafkastore.topic=<%= p("topic") %>
-
+kafkastore.topic.replication.factor=<%= replication %>
 # If true, API requests that fail will include extra debugging information, including stack traces
 debug=<%= p("debug") %>

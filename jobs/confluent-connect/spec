@@ -42,21 +42,12 @@ properties:
   config.storage.topic:
     description: Names of the internal topics for storing configs
     default: connect-configs
-  config.storage.replication_factor:
-    description: Replication factor for the config topic
-    default: 3
   offset.storage.topic:
     description: Names of the internal topics for storing offsets
     default: connect-offsets
-  offset.storage.replication_factor:
-    description: Replication factor for the offset topic
-    default: 3
   status.storage.topic:
     description: Names of the internal topics for storing statuses
     default: connect-statuses
-  status.storage.replication_factor:
-    description: Replication factor for the status topic
-    default: 3
 
   tls.ca_certs:
     description: |

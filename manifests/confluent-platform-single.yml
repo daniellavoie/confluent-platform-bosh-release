@@ -19,26 +19,6 @@ variables:
   options:
     ca: ca
     common_name: "*.((confluent-server-external-host))"
-- name: confluent-connect-tls
-  type: certificate
-  options:
-    ca: ca
-    common_name: "*.((confluent-connect-external-host))"
-- name: confluent-schema-registry-tls
-  type: certificate
-  options:
-    ca: ca
-    common_name: "*.((confluent-schema-registry-external-host))"
-- name: confluent-control-center-tls
-  type: certificate
-  options:
-    ca: ca
-    common_name: "*.((confluent-control-center-external-host))"
-- name: confluent-ksql-tls
-  type: certificate
-  options:
-    ca: ca
-    common_name: "*.((confluent-ksql-external-host))"
 - name: server-jaas-password
   type: password
 - name: metric-jaas-password
@@ -63,7 +43,7 @@ variables:
   type: password
 
 instance_groups:
-- name: server
+- name: confluent-server
   azs: [z1, z2, z3]
   instances: 1
   vm_type: single
@@ -71,7 +51,6 @@ instance_groups:
   persistent_disk: 200000
   vm_extensions:
   - control-center
-  - ksql
   networks:
   - name: default
   jobs:
@@ -113,13 +92,16 @@ instance_groups:
         jaas:
           username: metric
           password: ((metric-jaas-password))
+      replication_factor: 1
+      min_isr: 1
+
   - name: confluent-control-center
     release: confluent-platform
     properties:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-control-center-tls))
+        certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
       kafka:
         jaas:
@@ -136,7 +118,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-schema-registry-tls))
+        certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
       kafka:
         jaas:
@@ -172,7 +154,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-connect-tls))
+        certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
       basic:
         jaas:
@@ -192,6 +174,7 @@ instance_groups:
           access_key: ((connectors-s3-access-key))
           secret_key: ((connectors-s3-secret-key))
           bucket: ((connectors-s3-bucket))
+
   - name: confluent-ksql
     release: confluent-platform
     properties:
@@ -199,7 +182,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-ksql-tls))
+        certificate: ((confluent-server-tls))
       keystore_password: ((keystore-password))
       kafka:
         jaas:
