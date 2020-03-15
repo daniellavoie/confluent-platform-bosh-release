@@ -14,7 +14,7 @@ confluent.controlcenter.data.dir=/var/vcap/store/confluent-control-center
 confluent.controlcenter.internal.topics.replication=<%= replication %>
 
 confluent.controlcenter.ksql.url=<%= ksql.instances.map { |instance| "https://#{instance.address}:#{ksql.p('listen_port')}" }.join(",") %>
-confluent.controlcenter.ksql.advertised.url=https://<%= p("basic.jaas.username") %>:<%= p("basic.jaas.password") %><%= ksql.p("external_hostname") %>
+confluent.controlcenter.ksql.advertised.url=https://<%= p("basic.jaas.username") %>:<%= p("basic.jaas.password") %>@<%= ksql.p("external_hostname") %>
 
 confluent.controlcenter.rest.authentication.method=BASIC
 confluent.controlcenter.rest.authentication.realm=c3
