@@ -63,9 +63,9 @@ variables:
   type: password
 
 instance_groups:
-- name: confluent-zookeeper
+- name: server
   azs: [z1, z2, z3]
-  instances: 3
+  instances: 1
   vm_type: default
   stemcell: default
   persistent_disk: 10240
