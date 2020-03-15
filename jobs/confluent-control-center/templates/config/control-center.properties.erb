@@ -5,7 +5,12 @@
 <% ksql = link('confluent-ksql') %>
 <% registry = link('confluent-schema-registry') %>
 
-confluent.controlcenter.rest.listeners=http://0.0.0.0:<%= p("listen_port") %>
+confluent.controlcenter.rest.listeners=https://0.0.0.0:<%= p("listen_port") %>
+confluent.controlcenter.rest.ssl.keystore.location=/var/vcap/jobs/confluent-control-center/config/generated.keystore.jks
+confluent.controlcenter.rest.ssl.keystore.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.ssl.key.password=<%= p("keystore_password") %>
+confluent.controlcenter.rest.ssl.truststore.location=/var/vcap/jobs/confluent-control-center/config/generated.truststore.jks
+confluent.controlcenter.rest.ssl.truststore.password=<%= p("keystore_password") %>
 
 bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9093" }.join(",") %>
 
@@ -45,7 +50,7 @@ confluent.controlcenter.internal.topics.replication=<%= replication %>
 
 # A comma separated list of Connect host names
 <% connect_listen_port = connect.p('listen_port') %>
-confluent.controlcenter.connect.cluster=<%= connect.instances.map { |instance| "https://#{instance.address}:8443" }.join(",") %>
+confluent.controlcenter.connect.<%= connect.p('group_id') %>.cluster=<%= connect.instances.map { |instance| "https://#{instance.address}:8443" }.join(",") %>
 
 # KSQL cluster URL
 <% ksql_listen_port = ksql.p('listen_port') %>

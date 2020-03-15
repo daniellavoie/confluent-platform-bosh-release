@@ -83,6 +83,11 @@ internal.value.converter.schemas.enable=false
 #rest.host.name=0.0.0.0
 #rest.port=<%= p("listen_port") %>
 listeners=https://<%= spec.address %>:8443
+listeners.https.ssl.truststore.location=/var/vcap/jobs/confluent-connect/config/generated.truststore.jks
+listeners.https.ssl.truststore.password=<%= p("keystore_password") %>
+listeners.https.ssl.keystore.location=/var/vcap/jobs/confluent-connect/config/generated.keystore.jks
+listeners.https.ssl.keystore.password=<%= p("keystore_password") %>
+listeners.https.ssl.key.password=<%= p("keystore_password") %>
 
 # The Hostname & Port that will be given out to other workers to connect to i.e. URLs that are routable from other servers.
 #rest.advertised.host.name=0.0.0.0

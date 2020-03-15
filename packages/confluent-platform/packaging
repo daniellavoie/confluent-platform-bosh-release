@@ -1,4 +1,4 @@
-set -e -u
+set -ex
 
 unzip ${BOSH_COMPILE_TARGET}/confluent-platform/confluent-*.zip -d ${BOSH_COMPILE_TARGET}
 
