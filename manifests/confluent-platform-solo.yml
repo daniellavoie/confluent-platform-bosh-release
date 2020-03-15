@@ -1,65 +1,136 @@
 ---
-name: confluent-platform-dev
+name: confluent-platform
 addons:
 - name: bpm
   jobs:
   - name: bpm
     release: bpm
 
+variables:
+- name: keystore-password
+  type: password
+- name: ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: "Confluent Certificate Authority"
+- name: confluent-server-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-server-external-host))"
+- name: confluent-connect-tls
+  type: certificate
+  options:
+    ca: ca
+    common_name: "*.((confluent-connect-external-host))"
+- name: server-jaas-password
+  type: password
+- name: metric-jaas-password
+  type: password
+- name: connect-jaas-password
+  type: password
+- name: control-center-jaas-password
+  type: password
+- name: ksql-jaas-password
+  type: password
+- name: schema-registry-jaas-password
+  type: password
+
 instance_groups:
-- name: confluent-server
+- name: server
   azs: [z1, z2, z3]
   instances: 1
-  vm_resources:
-    cpu: 4
-    ram: 8192
-    ephemeral_disk_size: 10
+  vm_type: collocated
+  stemcell: default
+  persistent_disk: 200000
   vm_extensions:
   - control-center 
-  stemcell: default
-  persistent_disk: 10240
   networks:
   - name: default
   jobs:
   - name: confluent-zookeeper
     release: confluent-platform
+    properties:
+      jaas:
+        users:
+          server:
+            username: server
+            password: ((server-jaas-password))
+          metric:
+            username: metric
+            password: ((metric-jaas-password))
+          connect:
+            username: connect
+            password: ((connect-jaas-password))
+          control-center:
+            username: control-center
+            password: ((control-center-jaas-password))
+          ksql:
+            username: ksql
+            password: ((ksql-jaas-password))
+          schema-registry:
+            username: schema-registry
+            password: ((schema-registry-jaas-password))
   - name: confluent-server
     release: confluent-platform
     properties:
-      offsets:
-        topic:
-          replication:
-            factor: 1
-      transaction:
-        state:
-          log:
-            replication:
-              factor: 1
-            min:
-              isr: 1
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
+      jaas:
+        username: server
+        password: ((server-jaas-password))
       metric:
-        replicas: 1
         jaas:
           username: metric
           password: ((metric-jaas-password))
   - name: confluent-control-center
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
+      jaas:
+        username: control-center
+        password: ((control-center-jaas-password))
   - name: confluent-schema-registry
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
+      jaas:
+        username: schema-registry
+        password: ((schema-registry-jaas-password))
   - name: confluent-connect
     release: confluent-platform
     properties:
-      config:
-        storage:
-          replication_factor: 1
-      offset:
-        storage:
-          replication_factor: 1
-      status:
-        storage:
-          replication_factor: 1
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-connect-tls))
+      keystore_password: ((keystore-password))
+      jaas:
+        username: connect
+        password: ((connect-jaas-password))
   - name: confluent-ksql
     release: confluent-platform
+    properties:
+      tls:
+        ca_certs:
+        - ((ca.certificate))
+        certificate: ((confluent-server-tls))
+      keystore_password: ((keystore-password))
+      jaas:
+        username: ksql
+        password: ((ksql-jaas-password))
 
 stemcells:
 - alias: default
