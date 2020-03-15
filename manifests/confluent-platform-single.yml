@@ -63,14 +63,15 @@ variables:
   type: password
 
 instance_groups:
-- name: server
+- name: confluent-zookeeper
   azs: [z1, z2, z3]
   instances: 3
   vm_type: default
   stemcell: default
-  vm_extensions:
-  - control-center 
   persistent_disk: 10240
+  vm_extensions:
+  - control-center
+  - ksql
   networks:
   - name: default
   jobs:
@@ -165,36 +166,6 @@ instance_groups:
           password: ((schema-registry-users-app-password))
           roles:
           - app
-
-- name: confluent-control-center
-  azs: [z1, z2, z3]
-  instances: 1
-  vm_type: default
-  stemcell: default
-  persistent_disk: 10240
-  networks:
-  - name: default
-  jobs:
-
-- name: confluent-schema-registry
-  azs: [z1, z2, z3]
-  instances: 1
-  vm_type: default
-  stemcell: default
-  persistent_disk: 10240
-  networks:
-  - name: default
-  jobs:
-
-- name: confluent-connect
-  azs: [z1, z2, z3]
-  instances: 1
-  vm_type: default
-  stemcell: default
-  persistent_disk: 10240
-  networks:
-  - name: default
-  jobs:
   - name: confluent-connect
     release: confluent-platform
     properties:
@@ -221,7 +192,7 @@ instance_groups:
           access_key: ((connectors-s3-access-key))
           secret_key: ((connectors-s3-secret-key))
           bucket: ((connectors-s3-bucket))
-- name: confluent-ksql
+  - name: confluent-ksql
     release: confluent-platform
     properties:
       external_hostname: ((ksql-external-hostname))
