@@ -14,7 +14,6 @@ templates:
   config/ca_certs.pem.erb: config/ca_certs.pem
   config/cert.pem.erb: config/cert.pem
   config/key.pem.erb: config/key.pem
-  config/confluent-server-jaas.conf.erb: config/confluent-server-jaas.conf
 
 consumes:
 - name: confluent-zookeeper

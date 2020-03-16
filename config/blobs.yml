@@ -1,7 +1,7 @@
-confluent-platform/confluent-5.2.1-2.12.zip:
-  size: 530385649
-  object_id: 1084d580-918f-4c92-7dc8-d390b8739e2b
-  sha: sha256:079fee8774671769fbb2124428f5f75224d0c8836d36efede643b597727944b9
+confluent-platform/confluent-5.4.1-2.12.zip:
+  size: 957589905
+  object_id: 5904c30e-7e80-4164-5f5b-9003a45434eb
+  sha: sha256:95b3f1afad740bf3be9a38c16babe8b87e0c74b0a14792a63841bf9aa2d4cf08
 java/jdk8u192-b03.tar.gz:
   size: 45670457
   object_id: 5a70262f-3127-4a35-6685-b271ba939661

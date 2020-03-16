@@ -10,7 +10,6 @@ for jar_dir in $(ls -d /var/vcap/packages/**/*.jar); do
   export CLASSPATH=${jar_dir}:$CLASSPATH
 done
 
-export KAFKA_OPTS="-Djava.security.auth.login.config=/var/vcap/jobs/confluent-server/config/confluent-server-jaas.conf"
 export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/var/vcap/jobs/confluent-server/config/log4j.properties"
 export LOG_DIR=/var/vcap/sys/log/confluent-server
 export JMX_PORT="<%= p("jmx_port") %>"
