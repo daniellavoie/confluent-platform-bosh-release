@@ -14,7 +14,7 @@ variables:
   options:
     is_ca: true
     common_name: "Confluent Certificate Authority"
-- name: confluent-server-tls
+- name: confluent-server-single-tls
   type: certificate
   options:
     ca: ca
@@ -83,7 +83,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-server-single-tls))
       keystore_password: ((keystore-password))
       jaas:
         username: server
@@ -100,7 +100,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-server-single-tls))
       keystore_password: ((keystore-password))
       kafka:
         jaas:
@@ -117,7 +117,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-server-single-tls))
       keystore_password: ((keystore-password))
       kafka:
         jaas:
@@ -153,7 +153,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-server-single-tls))
       keystore_password: ((keystore-password))
       basic:
         jaas:
@@ -180,7 +180,7 @@ instance_groups:
       tls:
         ca_certs:
         - ((ca.certificate))
-        certificate: ((confluent-server-tls))
+        certificate: ((confluent-server-single-tls))
       keystore_password: ((keystore-password))
       kafka:
         jaas:
