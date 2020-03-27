@@ -1,5 +1,5 @@
 ---
-name: confluent-platform
+name: confluent-platform-single
 addons:
 - name: bpm
   jobs:
