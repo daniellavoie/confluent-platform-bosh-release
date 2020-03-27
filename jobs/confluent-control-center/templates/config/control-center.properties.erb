@@ -3,7 +3,7 @@
    connect = link('confluent-connect')
    ksql = link('confluent-ksql')
    registry = link('confluent-schema-registry')
-   replication = servers.instances.size > 1 ? (instances.size > 2 ? 3 : 2) : 1 %>
+   replication = servers.instances.size > 1 ? (servers.instances.size > 2 ? 3 : 2) : 1 %>
    
 
 bootstrap.servers=<%= servers.instances.map { |instance| "#{instance.address}:9092" }.join(",") %>

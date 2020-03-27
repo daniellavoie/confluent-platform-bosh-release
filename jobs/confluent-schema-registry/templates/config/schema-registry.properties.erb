@@ -1,6 +1,6 @@
 <%  servers = link('confluent-server') 
     
-    replication = servers.instances.size > 1 ? (instances.size > 2 ? 3 : 2) : 1 %>
+    replication = servers.instances.size > 1 ? (servers.instances.size > 2 ? 3 : 2) : 1 %>
 #
 # Copyright 2018 Confluent Inc.
 #
