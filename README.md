@@ -23,11 +23,9 @@ Long story short, Bosh let you declare a desired state of your software and the 
 * vSphere Deployment instructions - sooooon
 * Virtual Box deployment instructions - sooooon
 
-## Current limitations
+## Disclaimer
 
-** THIS IS FAR FROM BEING PRODUCTION READY **
-
-* End to end security is half way implemented.
+Please reach out if you plan on running this Bosh Release on an environment. I will be happy to assist in exchange of feedbacks.
 
 ## State of security
 
